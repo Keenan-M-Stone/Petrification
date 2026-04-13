@@ -335,3 +335,177 @@ def alpha_eigenstate_scan(H, x0, alphas, n_iter=300):
         quality[j] = overlaps[dominant[j]]
 
     return dominant, quality, eigenvalues
+
+
+# ============================================================
+# Numerov method (standard reference for 1D Schrödinger)
+# ============================================================
+
+def numerov_shoot(V_func, E, x_grid, parity="even"):
+    """
+    Numerov integration of the Schrödinger equation.
+
+    Uses the Numerov algorithm (6th-order in step size) to integrate
+    -psi'' + 2*V(x)*psi = 2*E*psi  from x=0 outward.
+
+    This is the standard workhorse for 1D quantum shooting methods and
+    provides our baseline for accuracy and speed comparisons.
+
+    Parameters
+    ----------
+    V_func : callable
+        Potential function V(x).
+    E : float
+        Trial energy.
+    x_grid : ndarray
+        Spatial grid (must be uniformly spaced).
+    parity : str
+        "even" or "odd".
+
+    Returns
+    -------
+    psi : ndarray
+        Wavefunction on the grid.
+    """
+    h = x_grid[1] - x_grid[0]
+    N = len(x_grid)
+    psi = np.zeros(N)
+
+    # Effective potential: k^2(x) = 2*(E - V(x))
+    k2 = 2.0 * (E - V_func(x_grid))
+
+    if parity == "even":
+        psi[0] = 1.0
+        psi[1] = (2.0 * (1.0 - 5.0/12.0 * h**2 * k2[0]) * psi[0]) / \
+                 (2.0 * (1.0 + 1.0/12.0 * h**2 * k2[1]))
+    elif parity == "odd":
+        psi[0] = 0.0
+        psi[1] = h  # small nonzero to seed
+    else:
+        raise ValueError(f"parity must be 'even' or 'odd', got '{parity}'")
+
+    # Numerov recurrence: (1 + h^2/12 k^2_{n+1}) psi_{n+1}
+    #   = 2(1 - 5h^2/12 k^2_n) psi_n - (1 + h^2/12 k^2_{n-1}) psi_{n-1}
+    for i in range(1, N - 1):
+        c_prev = 1.0 + h**2 / 12.0 * k2[i - 1]
+        c_curr = 1.0 - 5.0 * h**2 / 12.0 * k2[i]
+        c_next = 1.0 + h**2 / 12.0 * k2[i + 1]
+        psi[i + 1] = (2.0 * c_curr * psi[i] - c_prev * psi[i - 1]) / c_next
+
+    return psi
+
+
+def numerov_scan(V_func, E_range, x_grid, parity="even"):
+    """
+    For each trial energy, run Numerov and return psi(x_max).
+
+    Returns
+    -------
+    psi_end : ndarray
+        psi(x_max) for each trial energy.
+    """
+    results = np.zeros(len(E_range))
+    for j, E in enumerate(E_range):
+        psi = numerov_shoot(V_func, E, x_grid, parity)
+        results[j] = psi[-1]
+    return results
+
+
+def numerov_detect(V_func, E_range, x_grid, order=20):
+    """
+    Detect eigenvalues using Numerov + sign-change detection.
+
+    More robust than argrelmin — finds zeros of psi(x_max; E) by
+    detecting sign changes, then refines with bisection.
+
+    Returns
+    -------
+    E_detected : ndarray
+        Detected eigenvalue positions.
+    """
+    detected = []
+
+    for parity in ["even", "odd"]:
+        psi_end = numerov_scan(V_func, E_range, x_grid, parity)
+
+        # Find sign changes
+        for i in range(len(psi_end) - 1):
+            if psi_end[i] * psi_end[i + 1] < 0:
+                # Bisection refinement
+                E_lo, E_hi = E_range[i], E_range[i + 1]
+                for _ in range(60):
+                    E_mid = 0.5 * (E_lo + E_hi)
+                    psi_mid = numerov_shoot(V_func, E_mid, x_grid, parity)[-1]
+                    if psi_mid * numerov_shoot(V_func, E_lo, x_grid, parity)[-1] < 0:
+                        E_hi = E_mid
+                    else:
+                        E_lo = E_mid
+                detected.append(0.5 * (E_lo + E_hi))
+
+    return np.sort(detected)
+
+
+# ============================================================
+# Frobenius-Perron / Transfer operator (reverse direction)
+# ============================================================
+
+def frobenius_perron_matrix(f_map, a_param, N=200, x_range=(0.0, 1.0)):
+    """
+    Construct the Frobenius-Perron (transfer) operator for a discrete
+    map f: [0,1] -> [0,1].
+
+    The Frobenius-Perron operator L propagates probability densities:
+        (L rho)(x) = sum_{y: f(y)=x} rho(y) / |f'(y)|
+
+    We discretize this by binning: L_ij = (fraction of bin j that maps
+    into bin i).
+
+    If eigenstates and fixed points are truly connected, then the
+    spectrum of L should encode dynamical properties (Lyapunov exponents,
+    invariant measures, decay of correlations).
+
+    Parameters
+    ----------
+    f_map : callable
+        Map f(a, x).
+    a_param : float
+        Map parameter.
+    N : int
+        Number of bins.
+    x_range : tuple
+        Domain.
+
+    Returns
+    -------
+    L : ndarray
+        (N x N) transfer matrix.
+    bin_centers : ndarray
+        Bin center positions.
+    """
+    x_lo, x_hi = x_range
+    dx = (x_hi - x_lo) / N
+    bin_edges = np.linspace(x_lo, x_hi, N + 1)
+    bin_centers = 0.5 * (bin_edges[:-1] + bin_edges[1:])
+
+    # Monte Carlo estimate: sample sub-points within each bin,
+    # map forward, histogram into target bins
+    n_samples = 50  # sub-points per bin
+    L = np.zeros((N, N))
+
+    for j in range(N):
+        # Sample uniformly within bin j
+        x_samples = bin_edges[j] + dx * np.linspace(0.5/n_samples,
+                                                      1 - 0.5/n_samples,
+                                                      n_samples)
+        # Map forward
+        y_samples = f_map(a_param, x_samples)
+
+        # Bin the results
+        for y in y_samples:
+            if x_lo <= y < x_hi:
+                target_bin = int((y - x_lo) / dx)
+                if target_bin >= N:
+                    target_bin = N - 1
+                L[target_bin, j] += 1.0 / n_samples
+
+    return L, bin_centers

@@ -15,14 +15,16 @@ def alpha_transform(f, alpha, a, x):
     return alpha * f(a, x) + (1.0 - alpha) * x
 
 
-def compute_optimal_alpha(f_symbolic, a_val, x_domain=(-2.0, 5.0)):
+def compute_optimal_alpha(f_symbolic, a_val, x_domain=(-2.0, 5.0), boundary=False):
     """
     Compute the optimal alpha for stabilizing unstable fixed points.
 
     Given f(a, x), finds the extremal slopes (via second derivative roots)
     and computes:
-        alpha = 2 / (1 - df_max)   if df_max > 1
-        alpha = 2 / (1 - df_min)   if df_min < -1
+        alpha = 1 / (1 - df_max)   if df_max > 1   (optimal, zeroes g')
+        alpha = 1 / (1 - df_min)   if df_min < -1   (optimal, zeroes g')
+
+    With boundary=True, uses 2/(1-df) instead (marginal stability, g'=-1).
 
     Parameters
     ----------
@@ -32,6 +34,8 @@ def compute_optimal_alpha(f_symbolic, a_val, x_domain=(-2.0, 5.0)):
         Numeric value of the parameter a.
     x_domain : tuple
         Domain (x_min, x_max) for numeric fallback when f'' has no roots.
+    boundary : bool
+        If True, return the boundary alpha (g'=-1) instead of optimal (g'=0).
 
     Returns
     -------
@@ -75,19 +79,22 @@ def compute_optimal_alpha(f_symbolic, a_val, x_domain=(-2.0, 5.0)):
         df_min = float(np.min(df_vals))
         slopes = [('numeric_scan', df_max), ('numeric_scan', df_min)]
 
+    coeff = 2.0 if boundary else 1.0
+
     info = {
         'df_max': df_max,
         'df_min': df_min,
         'critical_points': slopes,
         'method': None,
+        'boundary': boundary,
     }
 
     if df_max > 1.0:
         info['method'] = 'max'
-        return 2.0 / (1.0 - df_max), info
+        return coeff / (1.0 - df_max), info
     elif df_min < -1.0:
         info['method'] = 'min'
-        return 2.0 / (1.0 - df_min), info
+        return coeff / (1.0 - df_min), info
     else:
         info['method'] = 'none_needed'
         return 1.0, info
