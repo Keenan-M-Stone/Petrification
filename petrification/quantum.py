@@ -126,9 +126,15 @@ def riccati_alpha(V_func, E, x_grid, y0=0.0, alpha=1.0, max_y=1e4):
 
         y_{n+1} = alpha * [y_n + h*(y_n^2 - 2V + 2E)] + (1-alpha) * y_n
 
-    This is the discrete analog of your alpha-transform applied to
-    Turbiner's nonlinearization. Alpha controls the stability basin:
-    different alpha values can stabilize trajectories for excited states.
+    This is the discrete analog of the alpha-transform applied to
+    Turbiner's nonlinearization.
+
+    Parameters
+    ----------
+    alpha : float or callable
+        If callable, alpha(x) is evaluated at each grid point, giving
+        position-dependent relaxation. This allows damping in classically
+        forbidden regions while retaining sensitivity in allowed regions.
 
     Returns
     -------
@@ -142,9 +148,10 @@ def riccati_alpha(V_func, E, x_grid, y0=0.0, alpha=1.0, max_y=1e4):
 
     for i in range(1, len(x_grid)):
         x = x_grid[i - 1]
+        a_val = alpha(x) if callable(alpha) else alpha
         y_rhs = y**2 - 2.0 * V_func(x) + 2.0 * E
         y_euler = y + h * y_rhs
-        y_new = alpha * y_euler + (1 - alpha) * y
+        y_new = a_val * y_euler + (1 - a_val) * y
 
         if abs(y_new) > max_y:
             trajectory[i:] = np.sign(y_new) * max_y

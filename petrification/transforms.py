@@ -11,8 +11,20 @@ import sympy as sym
 
 
 def alpha_transform(f, alpha, a, x):
-    """Apply the alpha-transform: g(x) = alpha*f(a,x) + (1-alpha)*x."""
-    return alpha * f(a, x) + (1.0 - alpha) * x
+    """
+    Apply the alpha-transform: g(x) = alpha*f(a,x) + (1-alpha)*x.
+
+    Parameters
+    ----------
+    alpha : float or callable
+        If callable, alpha(x) is evaluated at each x (position-dependent
+        relaxation). If float, standard constant-alpha transform.
+    """
+    if callable(alpha):
+        a_val = alpha(x)
+    else:
+        a_val = alpha
+    return a_val * f(a, x) + (1.0 - a_val) * x
 
 
 def compute_optimal_alpha(f_symbolic, a_val, x_domain=(-2.0, 5.0), boundary=False):
@@ -108,3 +120,66 @@ def alpha_range_for_logistic(a):
     if a <= 1:
         return None, None
     return 2.0 / (1.0 - a), 2.0 / (1.0 + a)
+
+
+def optimal_alpha_at_x(f_prime, a, x):
+    """
+    Compute the optimal alpha at position x given local slope f'(a, x).
+
+    Returns alpha(x) = 1 / (1 - f'(a, x)), which zeroes g'(x) at x.
+    Falls back to a bounded value when |f'| ≈ 1.
+
+    Parameters
+    ----------
+    f_prime : callable
+        Derivative f'(a, x).
+    a : float
+        Parameter value.
+    x : float or ndarray
+        Position(s).
+
+    Returns
+    -------
+    alpha : float or ndarray
+    """
+    slope = f_prime(a, x)
+    denom = 1.0 - slope
+    # Avoid division by zero near slope = 1 (neutral fixed points)
+    return np.where(np.abs(denom) > 1e-12, 1.0 / denom, 0.0)
+
+
+def make_alpha_func(f_prime, a, smooth=True, cap=5.0):
+    """
+    Construct a callable alpha(x) from the local slope f'(a, x).
+
+    The idea: at each x, choose alpha(x) = 1/(1 - f'(a,x)) to zero
+    the transformed derivative locally. This overcomes the obstruction
+    of Proposition 4: different fixed points get different alpha values
+    automatically.
+
+    Parameters
+    ----------
+    f_prime : callable
+        Derivative f'(a, x) of the map.
+    a : float
+        Map parameter.
+    smooth : bool
+        If True, clip alpha to [-cap, cap] to prevent divergence
+        near neutral fixed points (f' ≈ 1).
+    cap : float
+        Maximum |alpha| when smooth=True.
+
+    Returns
+    -------
+    alpha_func : callable
+        A function alpha(x) ready to pass to alpha_transform.
+    """
+    def alpha_func(x):
+        slope = f_prime(a, np.asarray(x, dtype=float))
+        denom = 1.0 - slope
+        alpha = np.where(np.abs(denom) > 1e-12, 1.0 / denom, 0.0)
+        if smooth:
+            alpha = np.clip(alpha, -cap, cap)
+        return float(alpha) if np.ndim(alpha) == 0 else alpha
+
+    return alpha_func

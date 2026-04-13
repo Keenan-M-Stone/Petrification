@@ -39,12 +39,18 @@ def iterate(f, a, x0, n_iter=100):
 def iterate_transformed(f, alpha, a, x0, n_iter=100):
     """
     Iterate the alpha-transformed map g(x) = alpha*f(a,x) + (1-alpha)*x.
+
+    Parameters
+    ----------
+    alpha : float or callable
+        If callable, alpha(x) is evaluated at each step.
     """
     traj = np.zeros(n_iter + 1)
     traj[0] = x0
     x = x0
     for i in range(n_iter):
-        x = alpha * f(a, x) + (1.0 - alpha) * x
+        a_val = alpha(x) if callable(alpha) else alpha
+        x = a_val * f(a, x) + (1.0 - a_val) * x
         traj[i + 1] = x
     return traj
 
@@ -77,7 +83,8 @@ def cobweb_data(f, a, x0, n_iter=20, alpha=None):
     """
     def step(x):
         if alpha is not None:
-            return alpha * f(a, x) + (1.0 - alpha) * x
+            a_val = alpha(x) if callable(alpha) else alpha
+            return a_val * f(a, x) + (1.0 - a_val) * x
         return f(a, x)
 
     Ix = [x0, x0]
