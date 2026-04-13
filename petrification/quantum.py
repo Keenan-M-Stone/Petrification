@@ -509,3 +509,96 @@ def frobenius_perron_matrix(f_map, a_param, N=200, x_range=(0.0, 1.0)):
                 L[target_bin, j] += 1.0 / n_samples
 
     return L, bin_centers
+
+
+# ============================================================
+# Ruelle-Pollicott resonances
+# ============================================================
+
+def fp_spectrum_at_params(f_map, a_param, N, n_keep=10, x_range=(0.0, 1.0)):
+    """
+    Compute top eigenvalues of the Frobenius-Perron operator at a single
+    parameter value and resolution.  Designed to be called via dask.delayed.
+
+    Returns
+    -------
+    evals : ndarray, shape (n_keep,)
+        Top eigenvalues sorted by magnitude.
+    """
+    L, _ = frobenius_perron_matrix(f_map, a_param, N=N, x_range=x_range)
+    ev = np.linalg.eigvals(L)
+    order = np.argsort(np.abs(ev))[::-1]
+    return ev[order[:n_keep]]
+
+
+def ruelle_pollicott_scan(f_map, a_param, N_values, n_keep=10,
+                          x_range=(0.0, 1.0)):
+    """
+    Compute FP spectrum at multiple resolutions (serial fallback).
+
+    Parameters
+    ----------
+    N_values : list of int
+        Bin counts for resolution study.
+    n_keep : int
+        Number of top eigenvalues to track.
+
+    Returns
+    -------
+    spectra : ndarray, shape (len(N_values), n_keep)
+    """
+    spectra = np.zeros((len(N_values), n_keep), dtype=complex)
+    for i, N in enumerate(N_values):
+        spectra[i, :] = fp_spectrum_at_params(f_map, a_param, N,
+                                              n_keep=n_keep, x_range=x_range)
+    return spectra
+
+
+def benchmark_single(V_func, x_lim, x_span, n_expect, N, E_scan):
+    """
+    Run all three eigensolvers for one (potential, grid-size) combo.
+    Designed to be dispatched via dask.delayed.
+
+    Returns
+    -------
+    dict with timing and error info.
+    """
+    import time as _time
+
+    x_g = np.linspace(x_lim[0], x_lim[1], N)
+    x_shoot = np.linspace(x_span[0], x_span[1], N)
+
+    # Ground truth
+    x_ref = np.linspace(x_lim[0], x_lim[1], 2000)
+    E_ref = eigh(discretize_hamiltonian(V_func, x_ref),
+                 eigvals_only=True)[:n_expect]
+
+    def _max_err(E_found, E_true):
+        if len(E_found) == 0:
+            return float('inf')
+        return max(min(abs(e - E_true)) for e in E_found)
+
+    # Matrix diag
+    t0 = _time.perf_counter()
+    E_mat = eigh(discretize_hamiltonian(V_func, x_g),
+                 eigvals_only=True)[:n_expect]
+    t_mat = _time.perf_counter() - t0
+
+    # Numerov
+    t0 = _time.perf_counter()
+    E_num = numerov_detect(V_func, E_scan, x_shoot, order=15)[:n_expect]
+    t_num = _time.perf_counter() - t0
+
+    # Riccati
+    from petrification.quantum import detect_eigenvalues as _det
+    t0 = _time.perf_counter()
+    E_ric = _det(V_func, E_scan, x_span=x_span, order=15)[:n_expect]
+    t_ric = _time.perf_counter() - t0
+
+    return {
+        't_mat': t_mat, 't_num': t_num, 't_ric': t_ric,
+        'err_mat': _max_err(E_mat, E_ref),
+        'err_num': _max_err(E_num, E_ref),
+        'err_ric': _max_err(E_ric, E_ref),
+        'n_num': len(E_num), 'n_ric': len(E_ric), 'N': N,
+    }
