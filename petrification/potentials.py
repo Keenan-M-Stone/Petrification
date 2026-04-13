@@ -30,6 +30,31 @@ def morse(x, D=10.0, alpha=1.0, x0=0.0):
     return D * (1.0 - np.exp(-alpha * (x - x0)))**2
 
 
+def coulomb(r, Z=1.0, ell=0):
+    """
+    Effective radial Coulomb potential for the hydrogen-like atom.
+
+    After substituting u(r) = r*psi(r), the radial Schrödinger equation
+    becomes  -u'' + V_eff(r) u = E u  (in atomic units hbar=m=e=1) with:
+
+        V_eff(r) = -Z/r + ell*(ell+1)/(2*r^2)
+
+    Exact eigenvalues (for ell=0): E_n = -Z^2 / (2*n^2), n=1,2,...
+
+    Parameters
+    ----------
+    r : ndarray
+        Radial coordinate (must be > 0).
+    Z : float
+        Nuclear charge.
+    ell : int
+        Angular momentum quantum number.
+    """
+    r = np.asarray(r, dtype=float)
+    V = np.where(r > 0, -Z / r + ell * (ell + 1) / (2.0 * r**2), 0.0)
+    return V
+
+
 # Registry of named potentials
 POTENTIAL_REGISTRY = {
     "harmonic": harmonic,
@@ -37,6 +62,7 @@ POTENTIAL_REGISTRY = {
     "double_well": double_well,
     "finite_square_well": finite_square_well,
     "morse": morse,
+    "coulomb": coulomb,
 }
 
 

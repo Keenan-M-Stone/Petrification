@@ -609,3 +609,235 @@ def benchmark_single(V_func, x_lim, x_span, n_expect, N, E_scan):
         'err_ric': _max_err(E_ric, E_ref),
         'n_num': len(E_num), 'n_ric': len(E_ric), 'N': N,
     }
+
+
+# ============================================================
+# Chebyshev spectral transfer operator
+# ============================================================
+
+def chebyshev_transfer_matrix(f_map, a_param, N=64, x_range=(0.0, 1.0)):
+    """
+    Construct the Frobenius-Perron operator using Chebyshev spectral
+    discretization with analytic branch inverses and barycentric
+    Lagrange interpolation.
+
+    NOTE: For chaotic maps, the invariant density is typically singular
+    (e.g., arcsine distribution for logistic at a=4), which means
+    polynomial bases converge poorly. The Ulam (uniform-bin) method
+    or weighted spectral methods are more appropriate in practice.
+    This function is retained for comparison purposes.
+
+    Parameters
+    ----------
+    f_map : callable
+        Map f(a, x). Must be unimodal on x_range.
+    a_param : float
+        Map parameter.
+    N : int
+        Number of Chebyshev nodes.
+    x_range : tuple
+        Domain.
+
+    Returns
+    -------
+    L : ndarray
+        (N x N) transfer matrix in nodal basis.
+    nodes : ndarray
+        Chebyshev node positions.
+    """
+    x_lo, x_hi = x_range
+
+    # Chebyshev nodes on [x_lo, x_hi]  (Gauss-Lobatto)
+    k = np.arange(N)
+    theta = np.pi * k / (N - 1)
+    nodes = 0.5 * (x_lo + x_hi) + 0.5 * (x_hi - x_lo) * np.cos(theta)
+    nodes = nodes[::-1]  # ascending order
+
+    # Barycentric weights for Chebyshev-Lobatto nodes
+    bary_w = np.ones(N)
+    for j in range(N):
+        bary_w[j] = (-1.0)**j
+    bary_w[0] *= 0.5
+    bary_w[-1] *= 0.5
+
+    L = np.zeros((N, N))
+
+    for i, y in enumerate(nodes):
+        disc = 1.0 - 4.0 * y / a_param
+        if disc < 0:
+            continue
+
+        sqrt_disc = np.sqrt(max(disc, 0.0))
+        preimages = [0.5 + 0.5 * sqrt_disc,
+                     0.5 - 0.5 * sqrt_disc]
+
+        for x_pre in preimages:
+            if x_pre < x_lo or x_pre > x_hi:
+                continue
+            f_prime = abs(a_param * (1.0 - 2.0 * x_pre))
+            if f_prime < 1e-14:
+                continue
+
+            weight = 1.0 / f_prime
+            diffs = x_pre - nodes
+            exact_match = np.argmin(np.abs(diffs))
+            if abs(diffs[exact_match]) < 1e-14:
+                L[i, exact_match] += weight
+            else:
+                terms = bary_w / diffs
+                total = np.sum(terms)
+                L[i, :] += weight * (terms / total)
+
+    return L, nodes
+
+
+def exact_ulam_matrix(f_map, a_param, N=200, x_range=(0.0, 1.0),
+                      n_sub=200):
+    """
+    Construct the Frobenius-Perron operator using the Ulam method with
+    exact (high-resolution) sub-binning instead of Monte Carlo.
+
+    For each source bin j, uniformly sample n_sub points, map them
+    forward through f, and count which target bin they land in.
+    Unlike frobenius_perron_matrix which uses 50 sub-points, this
+    uses many more for cleaner convergence.
+
+    Parameters
+    ----------
+    f_map : callable
+        Map f(a, x).
+    a_param : float
+        Map parameter.
+    N : int
+        Number of bins.
+    x_range : tuple
+        Domain.
+    n_sub : int
+        Sub-points per bin (higher = more accurate).
+
+    Returns
+    -------
+    L : ndarray
+        (N x N) transfer matrix.
+    bin_centers : ndarray
+    """
+    x_lo, x_hi = x_range
+    dx = (x_hi - x_lo) / N
+    bin_edges = np.linspace(x_lo, x_hi, N + 1)
+    bin_centers = 0.5 * (bin_edges[:-1] + bin_edges[1:])
+
+    L = np.zeros((N, N))
+
+    for j in range(N):
+        x_samples = bin_edges[j] + dx * np.linspace(
+            0.5 / n_sub, 1 - 0.5 / n_sub, n_sub)
+        y_samples = f_map(a_param, x_samples)
+
+        # Vectorized binning
+        target_bins = np.clip(
+            ((y_samples - x_lo) / dx).astype(int), 0, N - 1)
+        for tb in target_bins:
+            L[tb, j] += 1.0 / n_sub
+
+    return L, bin_centers
+
+
+# ============================================================
+# Riccati regularity map
+# ============================================================
+
+def riccati_regularity_map(V_func, E_range, y0_range, x_span=(0.0, 8.0),
+                           max_y=50.0, n_x=500):
+    """
+    Map the (E, y_0) parameter space to classify Riccati solutions as
+    bounded vs. divergent, using RK4 integration.
+
+    At eigenvalues, there exists a y_0 such that y(x) stays bounded
+    across the entire domain. Away from eigenvalues, all initial
+    conditions lead to divergence. This function computes a 2D map
+    of the maximum |y| reached during integration.
+
+    The result visualizes 'quantization as a regularity condition':
+    eigenvalues appear as narrow channels of bounded solutions in
+    an otherwise divergent landscape.
+
+    Parameters
+    ----------
+    V_func : callable
+        Potential function V(x).
+    E_range : ndarray
+        Trial energies (horizontal axis).
+    y0_range : ndarray
+        Initial conditions y(0) (vertical axis).
+    x_span : tuple
+        Integration domain.
+    max_y : float
+        Divergence cutoff.
+    n_x : int
+        Number of integration steps.
+
+    Returns
+    -------
+    regularity : ndarray, shape (len(y0_range), len(E_range))
+        log10(max|y|) over the trajectory. Low values indicate
+        bounded (near-eigenvalue) solutions.
+    """
+    x_grid = np.linspace(x_span[0], x_span[1], n_x)
+    h = x_grid[1] - x_grid[0]
+
+    # Precompute V on grid
+    V_vals = V_func(x_grid)
+
+    regularity = np.zeros((len(y0_range), len(E_range)))
+
+    for j, E in enumerate(E_range):
+        # Precompute RHS constant part: -2V + 2E
+        rhs_const = -2.0 * V_vals + 2.0 * E
+
+        for i, y0 in enumerate(y0_range):
+            y = float(y0)
+            max_abs_y = abs(y)
+            diverged = False
+
+            for k in range(len(x_grid) - 1):
+                # RK4 step for y' = y² + rhs_const[k]
+                # Interpolate rhs_const between grid points
+                c_k = rhs_const[k]
+                c_mid = 0.5 * (rhs_const[k] + rhs_const[min(k + 1, len(x_grid) - 1)])
+                c_next = rhs_const[min(k + 1, len(x_grid) - 1)]
+
+                k1 = y * y + c_k
+                y1 = y + 0.5 * h * k1
+                if abs(y1) > max_y:
+                    max_abs_y = max_y
+                    diverged = True
+                    break
+
+                k2 = y1 * y1 + c_mid
+                y2 = y + 0.5 * h * k2
+                if abs(y2) > max_y:
+                    max_abs_y = max_y
+                    diverged = True
+                    break
+
+                k3 = y2 * y2 + c_mid
+                y3 = y + h * k3
+                if abs(y3) > max_y:
+                    max_abs_y = max_y
+                    diverged = True
+                    break
+
+                k4 = y3 * y3 + c_next
+                y = y + (h / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4)
+
+                abs_y = abs(y)
+                if abs_y > max_y:
+                    max_abs_y = max_y
+                    diverged = True
+                    break
+                if abs_y > max_abs_y:
+                    max_abs_y = abs_y
+
+            regularity[i, j] = np.log10(max_abs_y + 1e-15)
+
+    return regularity
