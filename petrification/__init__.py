@@ -12,4 +12,5 @@ Modules:
     potentials  - Quantum potential functions
     quantum     - Hamiltonian discretization, spectral scanning, Riccati-Bloch
     iteration   - Fixed-point iteration engines (FPA, projective power, inverse power)
+    oscillators - Damped oscillator simulation, fitting, and perturbation detection
 """
