@@ -9,13 +9,13 @@ Origin: May 2017 (original scripts) — April 2026 (current notebook suite)
 
 ## What This Is
 
-Petrification explores the **alpha-transform** — the map
+Petrification explores what we'll call the **alpha-transform**, proposed as a simple and obvious way to stabilize, destabilize, and reverse the stability of fixed points in cobweb diagrams — the map
 
 $$g(x) = \alpha f(x) + (1-\alpha)x$$
 
 which preserves the fixed points of $f$ while rescaling their stability. The project investigates what this simple operation reveals when applied systematically to dynamical systems, quantum mechanics, and many-body physics.
 
-The transform is part of the Krasnoselskii-Mann family of relaxation methods. What's (potentially) new is the systematic application of position-dependent $\alpha(x)$ as a diagnostic and control tool.
+The transform is part of the Krasnoselskii-Mann family of relaxation methods. What appears to be new — based on a literature search conducted April 2026 (see [alpha_transform.ipynb §10.5](notebooks/alpha_transform.ipynb) for details) — is the systematic application of position-dependent $\alpha(x)$ as a diagnostic and control tool. No prior work was found using variable relaxation profiles to detect or reconstruct unknown perturbations.
 
 ## Key Results
 
@@ -36,10 +36,10 @@ The transform is part of the Krasnoselskii-Mann family of relaxation methods. Wh
 
 | Finding | Where | Significance |
 |---------|-------|-------------|
-| **$\alpha^* \approx 0.5$ universality for scalar Dyson equations** | [crossover_alpha_turbiner](notebooks/crossover_alpha_turbiner.ipynb) | Explains why self-consistent resummation works at all coupling strengths. Likely publishable. |
-| **Perturbation detection via $\alpha(x)$ profiles** | [perturbation_detection](notebooks/perturbation_detection.ipynb), [quantum](notebooks/quantum_perturbation_detection.ipynb) | $V'_\text{pert} = kx(\alpha(x) - 1)$ exactly reconstructs unmodeled forces. Shape of $\alpha - 1$ classifies perturbation type. |
+| **$\alpha^* \approx 0.5$ universality for scalar Dyson equations** | [crossover_alpha_turbiner](notebooks/crossover_alpha_turbiner.ipynb) | Constant mixing $\lambda = 0.5$ is used empirically in GW codes (Chibani et al. 2016) but never derived. Our analytical derivation from fixed-point stability is novel. |
+| **Perturbation detection via $\alpha(x)$ profiles** | [perturbation_detection](notebooks/perturbation_detection.ipynb), [quantum](notebooks/quantum_perturbation_detection.ipynb) | $V'_\text{pert} = kx(\alpha(x) - 1)$ exactly reconstructs unmodeled forces. No prior art found (April 2026 search). |
 | **Static chaos control via $\alpha(x)$** | [inverse_correspondence](notebooks/inverse_correspondence.ipynb) | Localized $\alpha(x)$ converts chaotic logistic map to superstable fixed point. Related to OGY but as static map modification. |
-| **Lyapunov invariance under constant $\alpha$** | [inverse_correspondence](notebooks/inverse_correspondence.ipynb) | Preliminary: regular and inverted maps share identical Lyapunov exponents and periods. Suggests $C^1$ conjugacy. |
+| **Lyapunov exponent relationship under constant $\alpha$** | [inverse_correspondence](notebooks/inverse_correspondence.ipynb) | Open question: how do Lyapunov exponents of regular and $\alpha$-transformed maps relate? The $(\alpha, a)$ phase diagram is unexplored. |
 
 ## Notebooks
 
@@ -80,6 +80,10 @@ Demonstrates that measuring the $\alpha(x)$ profile of a damped oscillator exact
 ### 7. [quantum_perturbation_detection.ipynb](notebooks/quantum_perturbation_detection.ipynb) — Quantum Perturbation Detection
 
 Extends perturbation detection to the hydrogen atom. Sequential stacking procedure: Coulomb baseline → detect fine structure (1/r³) → detect vacuum polarization (Yukawa). Shape of $\alpha(r) - 1$ discriminates power-law vs. exponential perturbations. Includes blind Gaussian well test.
+
+### Cross-Theory Connections
+
+[cross_theory_connections.md](notebooks/cross_theory_connections.md) catalogs connections to other mathematical frameworks (group theory, gauge theory, information theory, graph theory, tensor networks, fluid mechanics, etc.) that may simplify, generalize, or provide alternative notation for the alpha-transform results. Priority items: deviation-space coordinates (§12.2), Jacobi polynomial basis for improved RP resonances (§10.1), and information-theoretic bounds on perturbation detection (§3.2).
 
 ## Python Package: `petrification/`
 
@@ -131,9 +135,9 @@ petrification/
 ### Short-term (directly actionable)
 
 - [ ] **Matrix Dyson equations**: Does $\alpha^* \approx 0.5$ hold for multi-orbital Dyson in DMFT? This is the natural next step from the scalar result.
-- [ ] **Confirm Lyapunov invariance**: Prove or disprove that constant-$\alpha$ transforms preserve Lyapunov exponents. If true, characterize the conjugacy class.
+- [ ] **Lyapunov exponent relationship**: How do Lyapunov exponents of regular and $\alpha$-transformed maps relate? Run §4 of inverse_correspondence and characterize the $(\alpha, a)$ phase diagram.
 - [ ] **Piecewise $\alpha(\omega)$**: Can we overcome the bootstrap failure of adaptive $\alpha$ by using different constant $\alpha$ values in different frequency windows?
-- [ ] **Minimal discretization for RP resonances**: What resolution is needed for exact sub-leading Ruelle-Pollicott eigenvalues?
+- [ ] **Minimal discretization for RP resonances**: What resolution is needed for exact sub-leading Ruelle-Pollicott eigenvalues? Consider Jacobi polynomial basis weighted by arcsine measure (see [cross-theory connections §10](notebooks/cross_theory_connections.md)).
 
 ### Medium-term (requires new framework)
 
