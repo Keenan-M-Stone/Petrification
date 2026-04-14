@@ -315,10 +315,10 @@ def main():
     ax.legend(fontsize=8)
 
     plt.tight_layout()
-    plt.savefig("/home/lemma137/dev/Petrification/eigen_fixedpoint_demo.png",
+    plt.savefig("/home/lemma137/dev/Petrification/figures/eigen_fixedpoint_demo.png",
                 dpi=150, bbox_inches='tight')
     plt.close()
-    print("\nPlot saved to Petrification/eigen_fixedpoint_demo.png")
+    print("\nPlot saved to Petrification/figures/eigen_fixedpoint_demo.png")
 
     # ---- Numerical verification ----
     print("\n" + "=" * 70)

@@ -320,7 +320,7 @@ def main():
     ax.legend(fontsize=9)
 
     plt.tight_layout()
-    outpath = "/home/lemma137/dev/Petrification/eigen_fixedpoint_demo.png"
+    outpath = "/home/lemma137/dev/Petrification/figures/eigen_fixedpoint_demo.png"
     plt.savefig(outpath, dpi=150, bbox_inches='tight')
     plt.close()
     print(f"\nPlot saved to {outpath}")
@@ -401,7 +401,7 @@ def main():
                   fontsize=13)
     ax2.legend()
     ax2.set_ylim(-18, 20)
-    outpath2 = "/home/lemma137/dev/Petrification/anharmonic_bifurcation.png"
+    outpath2 = "/home/lemma137/dev/Petrification/figures/anharmonic_bifurcation.png"
     plt.tight_layout()
     plt.savefig(outpath2, dpi=150, bbox_inches='tight')
     plt.close()

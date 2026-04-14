@@ -116,15 +116,15 @@ petrification/
 | `oscillators` | `simulate(V', gamma, m, x0, v0, ...)` | RK45 damped oscillator integration |
 | `oscillators` | `infer_perturbation(...)` | Reconstruct $V'_\text{pert}$ from $\alpha(x)$ profile |
 
-## Standalone Scripts
+## Standalone Scripts (`scripts/`)
 
 | Script | Purpose |
-|--------|---------|
-| `Bifurcation_Transform.py` | Bifurcation diagrams for alpha-transformed logistic map |
-| `Bifurcation_logistic_gif.py` | Animated GIF of bifurcation across $\alpha$ values |
-| `Iteration_Transform.py` | Cobweb diagram visualization with alpha-transform |
-| `eigen_fixedpoint.py` | Eigenstate-fixed-point comparison (original 2017 script) |
-| `eigen_fixedpoint_v2.py` | Enhanced eigenstate analysis with visualization |
+|--------|--------|
+| `scripts/Bifurcation_Transform.py` | Bifurcation diagrams for alpha-transformed logistic map |
+| `scripts/Bifurcation_logistic_gif.py` | Animated GIF of bifurcation across $\alpha$ values |
+| `scripts/Iteration_Transform.py` | Cobweb diagram visualization with alpha-transform |
+| `scripts/eigen_fixedpoint.py` | Eigenstate-fixed-point comparison (original 2017 script) |
+| `scripts/eigen_fixedpoint_v2.py` | Enhanced eigenstate analysis with visualization |
 
 ## Open Questions and Future Directions
 
