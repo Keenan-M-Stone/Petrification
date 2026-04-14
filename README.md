@@ -103,7 +103,7 @@ petrification/
 |--------|----------|---------|
 | `maps` | `logistic(a, x)` | Standard logistic map $f(x) = ax(1-x)$ |
 | `transforms` | `alpha_transform(f, alpha, a, x)` | Apply $g = \alpha f + (1-\alpha)x$ |
-| `transforms` | `compute_optimal_alpha(f, a, x_domain)` | Find $\alpha^* = 1/(1-f'_\max)$ |
+| `transforms` | `compute_optimal_alpha(f, a, x_domain, boundary)` | Find $\alpha^* = 1/(1 - f'_{\max})$ |
 | `transforms` | `make_alpha_func(f', a, smooth, cap)` | Build callable $\alpha(x)$ with singularity capping |
 | `iteration` | `iterate_transformed(f, alpha, a, x0, n_iter)` | Iterate with constant or callable $\alpha$ |
 | `iteration` | `cobweb_data(f, a, x0, n_iter, alpha)` | Generate cobweb diagram coordinates |
