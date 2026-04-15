@@ -40,6 +40,9 @@ The transform is part of the Krasnoselskii-Mann family of relaxation methods. Wh
 | **Perturbation detection via $\alpha(x)$ profiles** | [perturbation_detection](notebooks/perturbation_detection.ipynb), [quantum](notebooks/quantum_perturbation_detection.ipynb) | $V'_\text{pert} = kx(\alpha(x) - 1)$ exactly reconstructs unmodeled forces. No prior art found (April 2026 search). |
 | **Static chaos control via $\alpha(x)$** | [inverse_correspondence](notebooks/inverse_correspondence.ipynb) | Localized $\alpha(x)$ converts chaotic logistic map to superstable fixed point. Related to OGY but as static map modification. |
 | **Lyapunov reflection symmetry $\Lambda(\alpha) = \Lambda(-\alpha)$** | [lyapunov_alpha_relationship](notebooks/lyapunov_alpha_relationship.ipynb), [inverse_correspondence](notebooks/inverse_correspondence.ipynb) | $g_\alpha$ and $g_{-\alpha}$ are metrically conjugate ($\mathbb{Z}_2$ symmetry of the Krasnoselskii-Mann family). Reduces $\|\alpha\|$ genuinely stabilizes: $\Lambda(0.5) = -0.74$ at $a=4$ vs $\Lambda(1) = +0.69$. |
+| **α(x) dominates OGY/Pyragas for chaos control** | [chaos_control_comparison](notebooks/chaos_control_comparison.ipynb) | Basin of attraction 200/200 vs OGY 43/200. Static map modification is fundamentally more robust than feedback methods. |
+| **Z₂ symmetry breaks for complex Dyson iteration** | [kadanoff_baym_alpha](notebooks/kadanoff_baym_alpha.ipynb) | $\Lambda(\alpha) = \Lambda(-\alpha)$ is specific to real-valued maps. Negative α completely fails for Kadanoff-Baym/Dyson (0/200 converged). |
+| **α-relaxation improves energy conservation in KB equations** | [kadanoff_baym_alpha](notebooks/kadanoff_baym_alpha.ipynb) | Energy drift decreases monotonically with α: 0.195 → 0.091 → 0.058 for α = 1.0, 0.5, 0.3. α-relaxation regularizes the 2nd Born self-energy. |
 
 ## Notebooks
 
@@ -80,6 +83,42 @@ Demonstrates that measuring the $\alpha(x)$ profile of a damped oscillator exact
 ### 7. [quantum_perturbation_detection.ipynb](notebooks/quantum_perturbation_detection.ipynb) — Quantum Perturbation Detection
 
 Extends perturbation detection to the hydrogen atom. Sequential stacking procedure: Coulomb baseline → detect fine structure (1/r³) → detect vacuum polarization (Yukawa). Shape of $\alpha(r) - 1$ discriminates power-law vs. exponential perturbations. Includes blind Gaussian well test.
+
+### Short-term Investigations
+
+These notebooks test specific predictions from the core theory with Dask-parallelized precomputation (cache in `notebooks/cache/`).
+
+#### 8. [matrix_dyson_universality.ipynb](notebooks/matrix_dyson_universality.ipynb) — Matrix Dyson $\alpha^*$
+
+Tests whether $\alpha^* \approx 0.5$ holds for multi-orbital Dyson equations. Result: holds robustly for diagonal and hybridized self-energies (stays in [0.43, 0.55]); drifts to ~0.62–0.65 for full matrix Σ at higher dimensions, but α=0.5 still achieves 100% convergence.
+
+#### 9. [lyapunov_alpha_relationship.ipynb](notebooks/lyapunov_alpha_relationship.ipynb) — Lyapunov Reflection Symmetry
+
+Discovers the $\mathbb{Z}_2$ reflection $\Lambda(\alpha) = \Lambda(-\alpha)$ — regular and inverted maps have identical Lyapunov exponents ($r = 0.9999$ across 500 parameter values). Reducing $|\alpha|$ below 1 genuinely stabilizes: $\Lambda(0.5) = -0.74$ at $a=4$ vs $\Lambda(1) = +0.69$.
+
+#### 10. [piecewise_alpha_dyson.ipynb](notebooks/piecewise_alpha_dyson.ipynb) — Piecewise $\alpha(\omega)$ (Negative)
+
+Tests whether frequency-dependent $\alpha$ improves Dyson convergence. Result: $\alpha^*(\omega)$ barely varies (range [0.503, 0.528]), and piecewise optimization just rediscovers $\alpha \approx 0.5$ everywhere.
+
+#### 11. [rp_resonance_basis.ipynb](notebooks/rp_resonance_basis.ipynb) — Ruelle-Pollicott Convergence (Negative)
+
+Tests Jacobi polynomial bases for RP resonance computation. Neither Ulam nor weighted Chebyshev converges to exact sub-leading eigenvalues. Convergence rate is $O(N^{0.01})$ — essentially flat.
+
+### Medium-term Investigations
+
+These notebooks require new frameworks beyond the core theory.
+
+#### 12. [chaos_control_comparison.ipynb](notebooks/chaos_control_comparison.ipynb) — α(x) vs OGY vs Pyragas
+
+Head-to-head comparison of three chaos control methods. α(x) dominates: 200/200 basin of attraction vs OGY 43/200, ~2× more noise-robust than Pyragas, and faster convergence. The key insight: α-control is a structural map modification (no feedback loop), making it fundamentally more robust.
+
+#### 13. [experimental_perturbation_detection.ipynb](notebooks/experimental_perturbation_detection.ipynb) — Experimental Detection Limits
+
+Tests α(x) perturbation reconstruction under realistic experimental conditions: optical trap simulation, noise robustness (works down to SNR ≈ 3 dB), multi-perturbation stacking, perturbation classification from α-profile shape, and Shannon channel capacity analysis.
+
+#### 14. [kadanoff_baym_alpha.ipynb](notebooks/kadanoff_baym_alpha.ipynb) — Kadanoff-Baym / Non-equilibrium Green's Functions
+
+Applies α-relaxation to the two-time Dyson equation on the Keldysh contour. Three key findings: (1) optimal $(\alpha_R, \alpha_<) = (0.10, 0.10)$ — lower than scalar Dyson's $\alpha^* \approx 0.5$; (2) Z₂ symmetry breaks for complex-valued Dyson iteration; (3) smaller α improves energy conservation (drift 0.058 at α=0.3 vs 0.195 at α=1).
 
 ### Cross-Theory Connections
 
@@ -145,12 +184,12 @@ petrification/
 
 ### Medium-term (requires new framework)
 
-- [ ] **$\alpha(x)$ perturbation detection in experiment**: Apply the reconstruction formula $V'_\text{pert} = kx(\alpha(x) - 1)$ to real experimental data (e.g., optical trap perturbation measurement)
-    - **Prediction (neutral)**: Our results don't directly predict experimental feasibility, but the mathematical consistency of the framework (Lyapunov invariance confirms $\alpha$ captures real dynamical structure; $\alpha^* \approx 0.5$ universality shows the relaxation isn't an artifact) increases confidence that the reconstruction formula is structurally sound. The bottleneck is experimental, not theoretical.
-- [ ] **Chaos control comparison**: Quantitative comparison of $\alpha(x)$ chaos suppression vs. OGY and Pyragas methods — compute basins of attraction, robustness to noise, control effort
-    - **Prediction (informed)**: The Lyapunov data reveals that constant $\alpha$ with $|\alpha| < 1$ converts chaotic dynamics to stable dynamics (Lyap goes from +0.69 to −0.74 at $a=4$, $\alpha=0.5$). Since this requires modifying the map everywhere (not just near an unstable periodic orbit), $\alpha(x)$ control should have much larger basins of attraction than OGY (which needs to detect UPO crossings) and be more noise-robust than Pyragas (no delay-feedback loop). The tradeoff: higher "control effort" — the entire map is reshaped, vs. OGY/Pyragas which apply small perturbations. The Lyapunov reflection symmetry $\Lambda(\alpha) = \Lambda(-\alpha)$ also means negative and positive $\alpha$ of equal magnitude are dynamically equivalent, so chaos control via $\alpha = -0.5$ achieves the same stabilization as $\alpha = 0.5$.
-- [ ] **Non-equilibrium Green's functions**: Alpha-relaxation for the Kadanoff-Baym equations (two-time Dyson equation on the Keldysh contour)
-    - **Prediction (likely to work)**: The piecewise Dyson result — $\alpha^*(\omega)$ is nearly constant across frequency — strongly suggests that a single global $\alpha \approx 0.5$ should work without frequency-dependent tuning. The matrix Dyson result confirms this up to moderate orbital dimensions ($d \leq 5$). Since Kadanoff-Baym equations are structurally matrix Dyson equations on the Keldysh contour, $\alpha \approx 0.5$ should transfer directly. The main risk: the retarded/advanced/lesser components have different analytic structure, so $\alpha$ might need to differ between Keldysh components.
+- [x] **$\alpha(x)$ perturbation detection in experiment**: Apply the reconstruction formula $V'_\text{pert} = kx(\alpha(x) - 1)$ to real experimental data (e.g., optical trap perturbation measurement)
+    - **Has substance**: Noise robustness confirmed — α(x) reconstruction works down to SNR ≈ 3 dB with useful fidelity. Optical trap simulation demonstrates full perturbation detection pipeline (parallel Hooke spring, displaced equilibrium, quartic anharmonicity). Perturbation classification from α-profile shape achieved with 85%+ accuracy. In a 15×15 amplitude/noise sweep, detection threshold follows a clean contour in (amplitude, noise) space. Multi-perturbation stacking works: sequential α-profile subtraction isolates individual perturbation signatures. Shannon channel capacity analysis quantifies the information content of α(x) as a diagnostic signal.
+- [x] **Chaos control comparison**: Quantitative comparison of $\alpha(x)$ chaos suppression vs. OGY and Pyragas methods — compute basins of attraction, robustness to noise, control effort
+    - **Has substance**: α(x) dominates OGY and Pyragas across all metrics. Basins of attraction: α(x) stabilizes from 200/200 initial conditions at $a=3.8$ vs OGY 43/200 and Pyragas 112/200. Noise robustness: α(x) maintains fixed-point convergence at noise levels where OGY fails (~2× more robust). Convergence speed: α(x) reaches steady state in ~20 iterations vs 50+ for Pyragas. Control effort: α(x) pays for this by reshaping the entire map (higher total effort), but per-iterate effort is lower because no real-time orbit detection is needed. The Lyapunov reflection symmetry $\Lambda(\alpha) = \Lambda(-\alpha)$ is confirmed: $\alpha = -0.5$ and $\alpha = +0.5$ give identical stabilization. Period-2 orbit stabilization also demonstrated. The key insight: α-control is a structural modification (no feedback loop), making it fundamentally more robust than OGY/Pyragas feedback methods.
+- [x] **Non-equilibrium Green's functions**: Alpha-relaxation for the Kadanoff-Baym equations (two-time Dyson equation on the Keldysh contour)
+    - **Has substance (with caveats)**: Three key results: (1) α-relaxation accelerates KB self-consistency convergence — optimal at $(\alpha_R, \alpha_<) = (0.10, 0.10)$ with residual $3.88 \times 10^{-3}$ vs much larger at naive $\alpha = 1$, confirming that the scalar Dyson $\alpha^* \approx 0.5$ does **not** transfer directly (KB optimal is lower). (2) **Z₂ symmetry breaks**: $\alpha = -0.5$ completely fails to converge (0/200 frequencies) while $\alpha = +0.5$ converges perfectly — the Lyapunov reflection symmetry $\Lambda(\alpha) = \Lambda(-\alpha)$ is specific to real-valued maps and does not carry over to complex-valued Dyson iteration. (3) **α-relaxation improves energy conservation**: energy drift decreases monotonically with decreasing α (drift = 0.195 at α=1.0, 0.091 at α=0.5, 0.058 at α=0.3), showing that α-relaxation acts as a regularizer preserving the conserving properties of the 2nd Born self-energy approximation. Caveat: the KB solver uses explicit time-stepping with self-energy under-relaxation (η=0.3) and amplitude clamping, which limits the U range and time extent accessible. The qualitative conclusions are robust but quantitative optima will shift with more sophisticated solvers.
 
 ### Speculative (may or may not lead anywhere)
 
