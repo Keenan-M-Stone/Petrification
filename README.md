@@ -39,7 +39,7 @@ The transform is part of the Krasnoselskii-Mann family of relaxation methods. Wh
 | **$\alpha^* \approx 0.5$ universality for scalar Dyson equations** | [crossover_alpha_turbiner](notebooks/crossover_alpha_turbiner.ipynb) | Constant mixing $\lambda = 0.5$ is used empirically in GW codes (Chibani et al. 2016) but never derived. Our analytical derivation from fixed-point stability is novel. |
 | **Perturbation detection via $\alpha(x)$ profiles** | [perturbation_detection](notebooks/perturbation_detection.ipynb), [quantum](notebooks/quantum_perturbation_detection.ipynb) | $V'_\text{pert} = kx(\alpha(x) - 1)$ exactly reconstructs unmodeled forces. No prior art found (April 2026 search). |
 | **Static chaos control via $\alpha(x)$** | [inverse_correspondence](notebooks/inverse_correspondence.ipynb) | Localized $\alpha(x)$ converts chaotic logistic map to superstable fixed point. Related to OGY but as static map modification. |
-| **Lyapunov reflection symmetry $\Lambda(\alpha) = \Lambda(-\alpha)$** | [lyapunov_alpha_relationship](notebooks/lyapunov_alpha_relationship.ipynb), [inverse_correspondence](notebooks/inverse_correspondence.ipynb) | $g_\alpha$ and $g_{-\alpha}$ are metrically conjugate ($\mathbb{Z}_2$ symmetry of the Krasnoselskii-Mann family). Reduces $|\alpha|$ genuinely stabilizes: $\Lambda(0.5) = -0.74$ at $a=4$ vs $\Lambda(1) = +0.69$. |
+| **Lyapunov reflection symmetry $\Lambda(\alpha) = \Lambda(-\alpha)$** | [lyapunov_alpha_relationship](notebooks/lyapunov_alpha_relationship.ipynb), [inverse_correspondence](notebooks/inverse_correspondence.ipynb) | $g_\alpha$ and $g_{-\alpha}$ are metrically conjugate ($\mathbb{Z}_2$ symmetry of the Krasnoselskii-Mann family). Reduces $\|\alpha\|$ genuinely stabilizes: $\Lambda(0.5) = -0.74$ at $a=4$ vs $\Lambda(1) = +0.69$. |
 
 ## Notebooks
 
@@ -185,3 +185,18 @@ e5db868  α(x) generalization: position-dependent transform
 59e18ad  Prediction-first experiments: Riccati, Frobenius-Perron
 42659fd  Initial commit
 ```
+
+## Afterword
+
+If any of this ever finds any use to anyone, then I'd like to go ahead and acknowledge my
+grad school family that continued to support me long after the nightmare ended.
+With special thanks to:
+
+- Amara Katabarwa, for his thoughtful insights into the original project.
+- Eric Suter, for his encouragements and for coining the term "Petrification".
+- Brandon Campbell, who was also in that class with us.
+- Antonio Mantica, who may have been in that class with us.
+- Lauren Sgro, did you take that class with us?
+
+Dedicated to the memory of Howard Lee.  
+"This began with a piece of chalk and heaven opened up." - H. Lee
