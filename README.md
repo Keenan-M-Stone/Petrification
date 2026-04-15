@@ -7,6 +7,36 @@ Origin: May 2017 (original scripts) — April 2026 (current notebook suite)
 
 ---
 
+## Why?
+
+When I was taking statistical mechanics in grad-school, we were using cobweb diagrams a lot as a way to visualize
+fixed point analysis. Part of one of the projects early on was calculating the values of the fixed points and I
+was annoyed by the procedure for getting the values of the unstable ones - the recommendations were:
+
+- "Just pick points that are close to it and keep doing that until you get an upper and lower bound on it"
+  - Yeah, fine, but that's like the opposite of the convenient.
+- "Put it in the calculator and then go backwards"
+  - Ok, cool, but that's not as nice as having a visual.
+- "Just graph it and get it visually"
+  - Sure, but when has that ever given a precise value.
+
+Because I was annoyed, and because I didn't want to put in more effort than I did for getting the values for stable
+fixed points, I tried this:
+
+1. All the fixed points are on that bisector line, so just subtract it off so all the fixed points are at zero: $g(x) = f(x) - x$
+2. Literally just flip the thing: $h(x) = -1 * g(x)$
+3. Move it back up to the bisector: $j(x) = h(x) + x$
+
+But then it was taking to long for some of them to converge and that was just as annoying too, so I added in an extra bit:
+
+- Rescale the slope so it converges faster: $h(x) \mapsto \alpha * g(x)$
+
+But I realized if I wanted credit, saying "it's obvious that this has the same fixed points as the original curve" probably
+wouldn't satisfy the TA grading the assignment, so I went a few steps further and wrote out the proof. I got the right values
+and that was good enough for me, but when I asked around, everyone else was pretty satisfied by the original recommended
+procedures - which somehow annoyed me even more, because no one appreciated how irritating it was. This work was motivated by
+wanting to demonstrate to them that they are "all a buncha suckas" - though I love them all dearly.
+
 ## What This Is
 
 Petrification explores what we'll call the **alpha-transform**, proposed as a simple and obvious way to stabilize, destabilize, and reverse the stability of fixed points in cobweb diagrams — the map
@@ -15,7 +45,7 @@ $$g(x) = \alpha f(x) + (1-\alpha)x$$
 
 which preserves the fixed points of $f$ while rescaling their stability. The project investigates what this simple operation reveals when applied systematically to dynamical systems, quantum mechanics, and many-body physics.
 
-The transform is part of the Krasnoselskii-Mann family of relaxation methods. What appears to be new — based on a literature search conducted April 2026 (see [alpha_transform.ipynb §10.5](notebooks/alpha_transform.ipynb) for details) — is the systematic application of position-dependent $\alpha(x)$ as a diagnostic and control tool. No prior work was found using variable relaxation profiles to detect or reconstruct unknown perturbations.
+The transform is part of the Krasnoselskii-Mann family of relaxation methods. What appears to be new — based on a literature search conducted April 2026 (see [alpha_transform.ipynb §10.5](notebooks/alpha_transform.ipynb) for details) — is the systematic application of position-dependent $\alpha(x)$ as a diagnostic and control tool. No prior work was found using variable relaxation profiles to detect or reconstruct unknown perturbations. I think it's safe to say you can think of $\alpha$ as the special cases of $\Theta$ from the KM family that do what I want them to (that's my argument and I'm too lazy to explain myself further).
 
 ## Key Results
 
