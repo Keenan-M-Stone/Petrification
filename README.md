@@ -37,15 +37,31 @@ and that was good enough for me, but when I asked around, everyone else was pret
 procedures - which somehow annoyed me even more, because no one appreciated how irritating it was. This work was motivated by
 wanting to demonstrate to them that they are "all a buncha suckas" - though I love them all dearly.
 
+Also, something else that bothered me about this whole thing was that it sounded too much like eigenstates in quantum mechanics
+and while I kept hearing "they are totally different things" from both other students and professors, I was never satisfied,
+so that's another motivator for me.
+
 ## What This Is
 
-Petrification explores what we'll call the **alpha-transform**, proposed as a simple and obvious way to stabilize, destabilize, and reverse the stability of fixed points in cobweb diagrams — the map
+"Petrification" explores what we'll call the **alpha-transform**, proposed as a simple and obvious way to stabilize, destabilize, and reverse the stability of fixed points in cobweb diagrams — the map
 
 $$g(x) = \alpha f(x) + (1-\alpha)x$$
 
 which preserves the fixed points of $f$ while rescaling their stability. The project investigates what this simple operation reveals when applied systematically to dynamical systems, quantum mechanics, and many-body physics.
 
 The transform is part of the Krasnoselskii-Mann family of relaxation methods. What appears to be new — based on a literature search conducted April 2026 (see [alpha_transform.ipynb §10.5](notebooks/alpha_transform.ipynb) for details) — is the systematic application of position-dependent $\alpha(x)$ as a diagnostic and control tool. No prior work was found using variable relaxation profiles to detect or reconstruct unknown perturbations. I think it's safe to say you can think of $\alpha$ as the special cases of $\Theta$ from the KM family that do what I want them to (that's my argument and I'm too lazy to explain myself further).
+
+## Hypotheses
+
+1. Can the alpha transform can let us inspect how a known potential can deviate purely from chaos more closely?  
+2. Is there some correspondence between orbits in the original potential around a stable fixed point and
+   orbits in the inverted ($\alpha < 0$) potential that help us understand when either chaos or odd-orderred periodicity can occur?
+    - Example: Does chaos only happen in the original system when we choose $\alpha$ such that both the stable-attractor
+               fixed point ($\alpha > 0$) and the unstable-repulsive fixed point (examined simultaneously $\alpha < 0$) exhibit bifurcation?
+    - Basically looking at how both the negative and positive cases behave at once and seeing how $\alpha(x)$
+      around one or the other effects the periodicity.
+3. Can we come up with a new way to understand when "random noise" isn't a sufficient argument for errors?
+4. Is there anything hiding in plain sight that is being overlooked because some people are "a buncha suckas"?
 
 ## Key Results
 
@@ -55,24 +71,31 @@ The transform is part of the Krasnoselskii-Mann family of relaxation methods. Wh
 - **$\alpha(x)$ generalization**: position-dependent relaxation with independent control at each fixed point; the $\alpha'$ term vanishes at fixed points
 - **Projective eigenstate interpretation**: eigenstates of $\hat{A}$ are fixed points of the projective action $\Pi_A$ on $\mathbb{P}(\mathcal{H})$
 - **Frobenius-Perron spectrum**: transfer operator eigenvalues of the logistic map reproduce known Koopman results
+- **Perturbation detection via $\alpha(x)$**: The reconstruction formula $V'_\text{pert} = kx(\alpha(x) - 1)$ reduces to $V'_\text{true} - V'_\text{model}$ — the standard force residual. The $\alpha(x)$ framing is a ratio repackaging of residual analysis, not a new measurement technique. (See [perturbation_detection](notebooks/perturbation_detection.ipynb), [quantum](notebooks/quantum_perturbation_detection.ipynb).)
 
 ### Dead ends (tested, found lacking)
 
 - **Riccati-Bloch eigenvalue computation**: 1200-45000× slower than matrix diagonalization
 - **Alpha-transform for eigenstate selection**: trades sensitivity for stability — wrong tradeoff
 - **Effective potential from invariant measure**: boundary singularities break self-consistency
+- **Piecewise $\alpha(\omega)$ for Dyson**: $\alpha^*(\omega)$ barely varies ([0.503, 0.528]), piecewise just rediscovers $\alpha \approx 0.5$
+- **RP resonance basis improvement**: Neither Ulam nor weighted Chebyshev converges; rate is $O(N^{0.01})$
+- **Optical trap perturbation test**: Spring constant extraction failed (94.5% error); "experimental" label overstated
 
 ### Novel findings
 
-| Finding | Where | Significance |
-|---------|-------|-------------|
-| **$\alpha^* \approx 0.5$ universality for scalar Dyson equations** | [crossover_alpha_turbiner](notebooks/crossover_alpha_turbiner.ipynb) | Constant mixing $\lambda = 0.5$ is used empirically in GW codes (Chibani et al. 2016) but never derived. Our analytical derivation from fixed-point stability is novel. |
-| **Perturbation detection via $\alpha(x)$ profiles** | [perturbation_detection](notebooks/perturbation_detection.ipynb), [quantum](notebooks/quantum_perturbation_detection.ipynb) | $V'_\text{pert} = kx(\alpha(x) - 1)$ exactly reconstructs unmodeled forces. No prior art found (April 2026 search). |
-| **Static chaos control via $\alpha(x)$** | [inverse_correspondence](notebooks/inverse_correspondence.ipynb) | Localized $\alpha(x)$ converts chaotic logistic map to superstable fixed point. Related to OGY but as static map modification. |
-| **Lyapunov reflection symmetry $\Lambda(\alpha) = \Lambda(-\alpha)$** | [lyapunov_alpha_relationship](notebooks/lyapunov_alpha_relationship.ipynb), [inverse_correspondence](notebooks/inverse_correspondence.ipynb) | $g_\alpha$ and $g_{-\alpha}$ are metrically conjugate ($\mathbb{Z}_2$ symmetry of the Krasnoselskii-Mann family). Reduces $\|\alpha\|$ genuinely stabilizes: $\Lambda(0.5) = -0.74$ at $a=4$ vs $\Lambda(1) = +0.69$. |
-| **α(x) dominates OGY/Pyragas for chaos control** | [chaos_control_comparison](notebooks/chaos_control_comparison.ipynb) | Basin of attraction 200/200 vs OGY 43/200. Static map modification is fundamentally more robust than feedback methods. |
-| **Z₂ symmetry breaks for complex Dyson iteration** | [kadanoff_baym_alpha](notebooks/kadanoff_baym_alpha.ipynb) | $\Lambda(\alpha) = \Lambda(-\alpha)$ is specific to real-valued maps. Negative α completely fails for Kadanoff-Baym/Dyson (0/200 converged). |
-| **α-relaxation improves energy conservation in KB equations** | [kadanoff_baym_alpha](notebooks/kadanoff_baym_alpha.ipynb) | Energy drift decreases monotonically with α: 0.195 → 0.091 → 0.058 for α = 1.0, 0.5, 0.3. α-relaxation regularizes the 2nd Born self-energy. |
+| Finding | Where | Status |
+|---------|-------|--------|
+| **$\alpha^* \approx 0.5$ universality for scalar Dyson equations** | [crossover_alpha_turbiner](notebooks/crossover_alpha_turbiner.ipynb) | **Strongest result.** Constant mixing $\lambda = 0.5$ is used empirically in GW codes (Chibani et al. 2016) but never derived. Our analytical derivation from fixed-point stability is novel. Holds for matrix Dyson at $d \leq 5$, drifts to 0.62-0.65 at $d = 8{-}10$. |
+| **Lyapunov reflection symmetry $\Lambda(\alpha) = \Lambda(-\alpha)$** | [lyapunov_alpha_relationship](notebooks/lyapunov_alpha_relationship.ipynb) | $g_\alpha$ and $g_{-\alpha}$ are metrically conjugate ($\mathbb{Z}_2$ symmetry). $r = 0.9999$ across 500 parameter values. Reducing $|\alpha|$ genuinely stabilizes: $\Lambda(0.5) = -0.74$ at $a=4$ vs $\Lambda(1) = +0.69$. Note: absolute Lyapunov has 8% numerical error vs exact $\ln 2$. |
+| **Z₂ symmetry breaks for complex Dyson iteration** | [kadanoff_baym_alpha](notebooks/kadanoff_baym_alpha.ipynb) | The Lyapunov reflection symmetry is specific to real-valued maps. Negative $\alpha$ completely fails for Kadanoff-Baym/Dyson (0/200 converged). |
+| **α-relaxation improves energy conservation in KB equations** | [kadanoff_baym_alpha](notebooks/kadanoff_baym_alpha.ipynb) | Energy drift decreases monotonically: 0.195 → 0.091 → 0.058 for $\alpha = 1.0, 0.5, 0.3$. Optimal $(\alpha_R, \alpha_<) = (0.10, 0.10)$ — lower than scalar Dyson's $\alpha^* \approx 0.5$. |
+
+### Partially validated (needs more work)
+
+| Finding | Where | Issue |
+|---------|-------|-------|
+| **Static chaos control via $\alpha(x)$** | [chaos_control_comparison](notebooks/chaos_control_comparison.ipynb) | α(x) wins 4/5 parameter values on basin size vs OGY (100% at $a \in \{3.5, 3.8, 3.9, 4.0\}$), but **loses at $a=3.7$** (63% vs OGY's 100%). Original Pyragas comparison invalid — code used positive $K$ in the odd number limitation regime (now fixed, needs re-execution). Not a clean sweep. |
 
 ## Notebooks
 
@@ -140,11 +163,11 @@ These notebooks require new frameworks beyond the core theory.
 
 #### 12. [chaos_control_comparison.ipynb](notebooks/chaos_control_comparison.ipynb) — α(x) vs OGY vs Pyragas
 
-Head-to-head comparison of three chaos control methods. α(x) dominates: 200/200 basin of attraction vs OGY 43/200, ~2× more noise-robust than Pyragas, and faster convergence. The key insight: α-control is a structural map modification (no feedback loop), making it fundamentally more robust.
+Head-to-head comparison of three chaos control methods. α(x) wins basin of attraction at 4/5 parameter values (100% at $a \in \{3.5, 3.8, 3.9, 4.0\}$, but only 63% at $a=3.7$ where OGY gets 100%). **Correction:** Original Pyragas implementation used positive $K$, which provably cannot stabilize logistic fixed points for $a > 3$ (odd number limitation; Nakajima 1997). Now fixed to compute optimal negative $K$ — notebook must be re-executed to update basin numbers.
 
-#### 13. [experimental_perturbation_detection.ipynb](notebooks/experimental_perturbation_detection.ipynb) — Experimental Detection Limits
+#### 13. [experimental_perturbation_detection.ipynb](notebooks/experimental_perturbation_detection.ipynb) — Perturbation Detection Limits
 
-Tests α(x) perturbation reconstruction under realistic experimental conditions: optical trap simulation, noise robustness (works down to SNR ≈ 3 dB), multi-perturbation stacking, perturbation classification from α-profile shape, and Shannon channel capacity analysis.
+Tests α(x) perturbation reconstruction under noise and multi-perturbation conditions. Core α(x) reconstruction works with critical SNR = 54.1. Multi-perturbation stacking demonstrated. **However**, the "experimental" label is overstated: the optical trap spring constant extraction failed (k=0.546 vs true 10.0, 94.5% error), and the α(x) formula is mathematically equivalent to computing force residuals $V'_\text{true} - V'_\text{model}$, not a fundamentally new technique.
 
 #### 14. [kadanoff_baym_alpha.ipynb](notebooks/kadanoff_baym_alpha.ipynb) — Kadanoff-Baym / Non-equilibrium Green's Functions
 
@@ -215,11 +238,11 @@ petrification/
 ### Medium-term (requires new framework)
 
 - [x] **$\alpha(x)$ perturbation detection in experiment**: Apply the reconstruction formula $V'_\text{pert} = kx(\alpha(x) - 1)$ to real experimental data (e.g., optical trap perturbation measurement)
-    - **Has substance**: Noise robustness confirmed — α(x) reconstruction works down to SNR ≈ 3 dB with useful fidelity. Optical trap simulation demonstrates full perturbation detection pipeline (parallel Hooke spring, displaced equilibrium, quartic anharmonicity). Perturbation classification from α-profile shape achieved with 85%+ accuracy. In a 15×15 amplitude/noise sweep, detection threshold follows a clean contour in (amplitude, noise) space. Multi-perturbation stacking works: sequential α-profile subtraction isolates individual perturbation signatures. Shannon channel capacity analysis quantifies the information content of α(x) as a diagnostic signal.
+    - **Partially validated, with key caveats**: Core α(x) reconstruction works under noise (critical SNR = 54.1). Multi-perturbation stacking demonstrated. However, (1) the α(x) reconstruction formula reduces to computing force residuals $V'_\text{true} - V'_\text{model}$, which is standard — the α(x) framing is a ratio repackaging, not a fundamentally new technique; (2) the optical trap spring constant test failed badly (k=0.546 vs true 10.0, 94.5% error); (3) the "experimental" label is overstated since all data is simulated.
 - [x] **Chaos control comparison**: Quantitative comparison of $\alpha(x)$ chaos suppression vs. OGY and Pyragas methods — compute basins of attraction, robustness to noise, control effort
-    - **Has substance**: α(x) dominates OGY and Pyragas across all metrics. Basins of attraction: α(x) stabilizes from 200/200 initial conditions at $a=3.8$ vs OGY 43/200 and Pyragas 112/200. Noise robustness: α(x) maintains fixed-point convergence at noise levels where OGY fails (~2× more robust). Convergence speed: α(x) reaches steady state in ~20 iterations vs 50+ for Pyragas. Control effort: α(x) pays for this by reshaping the entire map (higher total effort), but per-iterate effort is lower because no real-time orbit detection is needed. The Lyapunov reflection symmetry $\Lambda(\alpha) = \Lambda(-\alpha)$ is confirmed: $\alpha = -0.5$ and $\alpha = +0.5$ give identical stabilization. Period-2 orbit stabilization also demonstrated. The key insight: α-control is a structural modification (no feedback loop), making it fundamentally more robust than OGY/Pyragas feedback methods.
+    - **Partially validated**: α(x) wins basin of attraction at 4/5 parameter values vs OGY: 100% at $a \in \{3.5, 3.8, 3.9, 4.0\}$, but only 63% at $a=3.7$ (OGY gets 100%). Convergence is faster (~6 iterations vs 85 for OGY at $a=3.8$). **Critical issue**: the original Pyragas comparison was invalid — positive $K$ provably cannot stabilize logistic fixed points for $a > 3$ (odd number limitation, Nakajima 1997). The implementation now computes optimal negative $K$ but results need re-execution. The Z₂ result (+α works, −α fails) is confirmed. Period-2 orbit stabilization also demonstrated.
 - [x] **Non-equilibrium Green's functions**: Alpha-relaxation for the Kadanoff-Baym equations (two-time Dyson equation on the Keldysh contour)
-    - **Has substance (with caveats)**: Three key results: (1) α-relaxation accelerates KB self-consistency convergence — optimal at $(\alpha_R, \alpha_<) = (0.10, 0.10)$ with residual $3.88 \times 10^{-3}$ vs much larger at naive $\alpha = 1$, confirming that the scalar Dyson $\alpha^* \approx 0.5$ does **not** transfer directly (KB optimal is lower). (2) **Z₂ symmetry breaks**: $\alpha = -0.5$ completely fails to converge (0/200 frequencies) while $\alpha = +0.5$ converges perfectly — the Lyapunov reflection symmetry $\Lambda(\alpha) = \Lambda(-\alpha)$ is specific to real-valued maps and does not carry over to complex-valued Dyson iteration. (3) **α-relaxation improves energy conservation**: energy drift decreases monotonically with decreasing α (drift = 0.195 at α=1.0, 0.091 at α=0.5, 0.058 at α=0.3), showing that α-relaxation acts as a regularizer preserving the conserving properties of the 2nd Born self-energy approximation. Caveat: the KB solver uses explicit time-stepping with self-energy under-relaxation (η=0.3) and amplitude clamping, which limits the U range and time extent accessible. The qualitative conclusions are robust but quantitative optima will shift with more sophisticated solvers.
+    - **Has substance (with caveats)**: Three key results: (1) optimal $(\alpha_R, \alpha_<) = (0.10, 0.10)$ with residual $3.88 \times 10^{-3}$ — the scalar Dyson $\alpha^* \approx 0.5$ does **not** transfer directly to KB; (2) **Z₂ symmetry breaks**: $\alpha = -0.5$ completely fails (0/200 converged) while $\alpha = +0.5$ works perfectly — the Lyapunov reflection symmetry is specific to real-valued maps; (3) energy drift decreases monotonically with smaller $\alpha$ (0.195 → 0.091 → 0.058 for $\alpha = 1.0, 0.5, 0.3$). Caveat: the KB solver uses explicit time-stepping with self-energy under-relaxation ($\eta=0.3$) and amplitude clamping, which limits the $U$ range and time extent accessible.
 
 ### Speculative (may or may not lead anywhere)
 
@@ -261,11 +284,14 @@ If any of this ever finds any use to anyone, then I'd like to go ahead and ackno
 grad school family that continued to support me long after the nightmare ended.
 With special thanks to:
 
+- Howard Lee, the G.O.A.T.
 - Amara Katabarwa, for his thoughtful insights into the original project.
 - Eric Suter, for his encouragements and for coining the term "Petrification".
 - Brandon Campbell, who was also in that class with us.
 - Antonio Mantica, who may have been in that class with us.
 - Lauren Sgro, did you take that class with us?
+- Greg Simchick, did you even go to my school?
+- Andrei Galiautdinov - JFC, this guys was such a great teacher.
 
 Dedicated to the memory of Howard Lee.  
 "This began with a piece of chalk and heaven opened up." - H. Lee
