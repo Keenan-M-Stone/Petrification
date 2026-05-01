@@ -100,6 +100,75 @@ def cobweb_data(f, a, x0, n_iter=20, alpha=None):
     return np.array(Ix), np.array(Iy)
 
 
+def cobweb_arrows(ax, Ix, Iy, color='red', alpha=0.8, lw=1.0,
+                  arrow_fraction=0.55, arrowsize=12, skip_first=True):
+    """
+    Overlay directional arrows on an already-plotted cobweb diagram.
+
+    Each segment of the cobweb path gets a small arrowhead drawn at
+    ``arrow_fraction`` of the way along it, showing the direction of
+    iteration.  Call this *after* ``ax.plot(Ix, Iy, ...)``.
+
+    Parameters
+    ----------
+    ax : matplotlib Axes
+        The axes that already contains the cobweb line.
+    Ix, Iy : array-like
+        Coordinate arrays returned by :func:`cobweb_data`.
+    color : str
+        Colour for the arrows.
+    alpha : float
+        Opacity.
+    lw : float
+        Line width of the arrow shaft.
+    arrow_fraction : float
+        Position along each segment (0 = start, 1 = end) where the
+        arrowhead is placed.  0.55 puts it just past the midpoint.
+    arrowsize : float
+        ``mutation_scale`` passed to matplotlib's FancyArrowPatch,
+        controlling the head size in display units (≈ points).
+    skip_first : bool
+        If True, skip the opening vertical segment from y=0 to the
+        curve — it is an initial-condition artifact, not an iteration
+        step.
+    """
+    Ix = np.asarray(Ix, dtype=float)
+    Iy = np.asarray(Iy, dtype=float)
+
+    start_idx = 2 if skip_first else 0
+
+    for i in range(start_idx, len(Ix) - 1):
+        x0, y0 = Ix[i], Iy[i]
+        x1, y1 = Ix[i + 1], Iy[i + 1]
+
+        seg_len = abs(x1 - x0) + abs(y1 - y0)
+        if seg_len < 1e-14:
+            continue
+
+        # Position the arrowhead at arrow_fraction along the segment;
+        # the 'arrow' is a zero-length annotation whose direction is
+        # given by a tiny nudge in the segment direction.
+        t = arrow_fraction
+        eps = seg_len * 1e-4
+        xa = x0 + t * (x1 - x0)
+        ya = y0 + t * (y1 - y0)
+        dx_hat = (x1 - x0) / seg_len * eps
+        dy_hat = (y1 - y0) / seg_len * eps
+
+        ax.annotate(
+            '',
+            xy=(xa + dx_hat, ya + dy_hat),
+            xytext=(xa - dx_hat, ya - dy_hat),
+            arrowprops=dict(
+                arrowstyle='-|>',
+                color=color,
+                lw=lw,
+                alpha=alpha,
+                mutation_scale=arrowsize,
+            ),
+        )
+
+
 def find_fixed_points(f, a, x_range, n_points=1000, tol=1e-10):
     """
     Numerically find fixed points of f(a, x) = x in a given range.

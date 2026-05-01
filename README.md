@@ -15,8 +15,9 @@ was annoyed by the procedure for getting the values of the unstable ones - the r
 
 - "Just pick points that are close to it and keep doing that until you get an upper and lower bound on it"
   - Yeah, fine, but that's like the opposite of the convenient.
-- "Put it in the calculator and then go backwards"
-  - Ok, cool, but that's not as nice as having a visual.
+- "Put it in the calculator and then go backwards" / "Invert the function: $y \mapsto x, x \mapsto y$"
+  - Ok, cool, but that's not what I'm trying to do here. I think there's a class of functions that
+    symmetrically retain the same fixed-points and warrant further investigation.
 - "Just graph it and get it visually"
   - Sure, but when has that ever given a precise value.
 
@@ -47,9 +48,14 @@ so that's another motivator for me.
 
 $$g(x) = \alpha f(x) + (1-\alpha)x$$
 
-which preserves the fixed points of $f$ while rescaling their stability. The project investigates what this simple operation reveals when applied systematically to dynamical systems, quantum mechanics, and many-body physics.
+which preserves the fixed points of $f$ while rescaling their stability.
+The project investigates what this simple operation reveals when applied systematically to dynamical systems, quantum mechanics, and many-body physics.
 
-The transform is part of the Krasnoselskii-Mann family of relaxation methods. What appears to be new — based on a literature search conducted April 2026 (see [alpha_transform.ipynb §10.5](notebooks/alpha_transform.ipynb) for details) — is the systematic application of position-dependent $\alpha(x)$ as a diagnostic and control tool. No prior work was found using variable relaxation profiles to detect or reconstruct unknown perturbations. I think it's safe to say you can think of $\alpha$ as the special cases of $\Theta$ from the KM family that do what I want them to (that's my argument and I'm too lazy to explain myself further).
+The transform is part of the Krasnoselskii-Mann family of relaxation methods. What appears to be new — based on a literature search conducted April 2026
+(see [alpha_transform.ipynb §10.5](notebooks/alpha_transform.ipynb) for details) — is the systematic application of position-dependent $\alpha(x)$ as a diagnostic and control tool.
+No prior work was found using variable relaxation profiles to detect or reconstruct unknown perturbations.
+I think it's safe to say you can think of $\alpha$ as the special cases of $\Theta$ from the KM family that do what I want them to
+(that's my argument and I'm too lazy to explain myself further).
 
 ## Hypotheses
 
@@ -71,7 +77,9 @@ The transform is part of the Krasnoselskii-Mann family of relaxation methods. Wh
 - **$\alpha(x)$ generalization**: position-dependent relaxation with independent control at each fixed point; the $\alpha'$ term vanishes at fixed points
 - **Projective eigenstate interpretation**: eigenstates of $\hat{A}$ are fixed points of the projective action $\Pi_A$ on $\mathbb{P}(\mathcal{H})$
 - **Frobenius-Perron spectrum**: transfer operator eigenvalues of the logistic map reproduce known Koopman results
-- **Perturbation detection via $\alpha(x)$**: The reconstruction formula $V'_\text{pert} = kx(\alpha(x) - 1)$ reduces to $V'_\text{true} - V'_\text{model}$ — the standard force residual. The $\alpha(x)$ framing is a ratio repackaging of residual analysis, not a new measurement technique. (See [perturbation_detection](notebooks/perturbation_detection.ipynb), [quantum](notebooks/quantum_perturbation_detection.ipynb).)
+- **Perturbation detection via $\alpha(x)$**: The reconstruction formula $V'_\text{pert} = kx(\alpha(x) - 1)$ reduces to $V'_\text{true} - V'_\text{model}$ — the standard force residual.
+  The $\alpha(x)$ framing is a ratio repackaging of residual analysis, not a new measurement technique.
+  (See [perturbation_detection](notebooks/perturbation_detection.ipynb), [quantum](notebooks/quantum_perturbation_detection.ipynb).)
 
 ### Dead ends (tested, found lacking)
 
@@ -87,9 +95,13 @@ The transform is part of the Krasnoselskii-Mann family of relaxation methods. Wh
 | Finding | Where | Status |
 |---------|-------|--------|
 | **$\alpha^* \approx 0.5$ universality for scalar Dyson equations** | [crossover_alpha_turbiner](notebooks/crossover_alpha_turbiner.ipynb) | **Strongest result.** Constant mixing $\lambda = 0.5$ is used empirically in GW codes (Chibani et al. 2016) but never derived. Our analytical derivation from fixed-point stability is novel. Holds for matrix Dyson at $d \leq 5$, drifts to 0.62-0.65 at $d = 8{-}10$. |
-| **Lyapunov reflection symmetry $\Lambda(\alpha) = \Lambda(-\alpha)$** | [lyapunov_alpha_relationship](notebooks/lyapunov_alpha_relationship.ipynb) | $g_\alpha$ and $g_{-\alpha}$ are metrically conjugate ($\mathbb{Z}_2$ symmetry). $r = 0.9999$ across 500 parameter values. Reducing $|\alpha|$ genuinely stabilizes: $\Lambda(0.5) = -0.74$ at $a=4$ vs $\Lambda(1) = +0.69$. Note: absolute Lyapunov has 8% numerical error vs exact $\ln 2$. |
+| **Lyapunov reflection symmetry $\Lambda(\alpha) = \Lambda(-\alpha)$** | [lyapunov_alpha_relationship](notebooks/lyapunov_alpha_relationship.ipynb) | $g_\alpha$ and $g_{-\alpha}$ are metrically conjugate ($\mathbb{Z}_2$ symmetry). $r = 0.9999$ across 500 parameter values. Reducing $\|\alpha\|$ genuinely stabilizes: $\Lambda(0.5) = -0.74$ at $a=4$ vs $\Lambda(1) = +0.69$. Note: absolute Lyapunov has 8% numerical error vs exact $\ln 2$. |
 | **Z₂ symmetry breaks for complex Dyson iteration** | [kadanoff_baym_alpha](notebooks/kadanoff_baym_alpha.ipynb) | The Lyapunov reflection symmetry is specific to real-valued maps. Negative $\alpha$ completely fails for Kadanoff-Baym/Dyson (0/200 converged). |
 | **α-relaxation improves energy conservation in KB equations** | [kadanoff_baym_alpha](notebooks/kadanoff_baym_alpha.ipynb) | Energy drift decreases monotonically: 0.195 → 0.091 → 0.058 for $\alpha = 1.0, 0.5, 0.3$. Optimal $(\alpha_R, \alpha_<) = (0.10, 0.10)$ — lower than scalar Dyson's $\alpha^* \approx 0.5$. |
+| **IFT fixed-point drift under additive perturbation (Thm 1)** | [alpha_perturbation_probing](notebooks/alpha_perturbation_probing.ipynb) | Proved: $x^*_\varepsilon = x^*_0 - \varepsilon P(x^*_0)/(f_0'(x^*_0)-1) + O(\varepsilon^2)$. Both logistic fixed points drift in opposite directions for same-sign $P$ (Corollary 1). Verified numerically to $O(\varepsilon^2)$. |
+| **Perturbation stability shift formula (Thm 2)** | [alpha_perturbation_probing](notebooks/alpha_perturbation_probing.ipynb) | First-order formula for how the derivative at the perturbed fixed point changes. Enables predicting stability transitions without re-solving. |
+| **Gaussian selectivity exponential bound (Thm 3)** | [alpha_perturbation_probing](notebooks/alpha_perturbation_probing.ipynb) | A narrow Gaussian perturbation centred on one fixed point leaves the other exponentially unaffected: ratio $\sim \exp[-(x^*_1 - x^*_0)^2/(2\sigma^2)]$. At $\sigma=0.08$ the selectivity ratio is $\approx 5\times 10^{-22}$. |
+| **Null frequencies — FP immune to sine perturbation** | [alpha_perturbation_probing](notebooks/alpha_perturbation_probing.ipynb) | Sine perturbation $\varepsilon\sin(\omega x)$ has zero first-order effect at frequencies $\omega_k = k\pi/x^*_1$. First null at $\omega \approx 4.3$. Verified numerically. |
 
 ### Partially validated (needs more work)
 
@@ -103,13 +115,16 @@ Listed in recommended reading order.
 
 ### 1. [alpha_transform.ipynb](notebooks/alpha_transform.ipynb) — Core Theory
 
-The foundation notebook. Develops the alpha-transform from visual intuition (subtract bisector → scale → add back) through formal proofs (Props 1-5) to the position-dependent generalization $\alpha(x)$. Includes quantum eigenstate demonstrations and literature placement.
+The foundation notebook.
+Develops the alpha-transform from visual intuition (subtract bisector → scale → add back) through formal proofs (Props 1-5) to the position-dependent generalization $\alpha(x)$. 
+Includes quantum eigenstate demonstrations and literature placement.
 
 **Sections:** Literature review → Visual discovery → Formal theory → $\alpha(x)$ generalization → Literature comparison → Demonstrations → Assessment
 
 ### 2. [eigenstate_fixedpoint_correspondence.ipynb](notebooks/eigenstate_fixedpoint_correspondence.ipynb) — Full Investigation
 
-The largest notebook (~3300 lines). Systematically tests the eigenstate-fixed-point correspondence with prediction-first methodology. Includes 11 experiments across five directions (forward QM, alpha for eigenstates, reverse spectral→chaos, conceptual quantization, RP resonances).
+The largest notebook (~3300 lines). Systematically tests the eigenstate-fixed-point correspondence with prediction-first methodology.
+Includes 11 experiments across five directions (forward QM, alpha for eigenstates, reverse spectral→chaos, conceptual quantization, RP resonances).
 
 **Key experiments:** Riccati-shooting benchmark, alpha-relaxed Riccati, Frobenius-Perron operator, effective potential, Ruelle-Pollicott resonances, Riccati transfer operator
 
@@ -117,25 +132,36 @@ The largest notebook (~3300 lines). Systematically tests the eigenstate-fixed-po
 
 ### 3. [turbiner_riccati_bloch.ipynb](notebooks/turbiner_riccati_bloch.ipynb) — Riccati-Bloch Deep Dive
 
-Focused treatment of Turbiner's nonlinearization: the Riccati-Bloch equation $y' = y^2 - 2V + 2E$ has bounded trajectories if and only if $E$ is an eigenvalue. Detailed trajectory analysis and boundary condition experiments.
+Focused treatment of Turbiner's nonlinearization: the Riccati-Bloch equation $y' = y^2 - 2V + 2E$ has bounded trajectories if and only if $E$ is an eigenvalue.
+Detailed trajectory analysis and boundary condition experiments.
 
 ### 4. [crossover_alpha_turbiner.ipynb](notebooks/crossover_alpha_turbiner.ipynb) — Dyson Equation (Novel)
 
-Applies alpha-relaxation to the Dyson equation $G = 1/(\omega - \varepsilon_0 - \Sigma[G])$. Discovers that constant $\alpha \approx 0.5$ provides universal convergence across all coupling strengths. Diagnoses the bootstrap failure of adaptive $\alpha(\omega)$. Connects to the SCN/Nullified framework. Includes matrix Dyson and DMFT future directions.
+Applies alpha-relaxation to the Dyson equation $G = 1/(\omega - \varepsilon_0 - \Sigma[G])$.
+Discovers that constant $\alpha \approx 0.5$ provides universal convergence across all coupling strengths.
+Diagnoses the bootstrap failure of adaptive $\alpha(\omega)$. Connects to the SCN/Nullified framework.
+Includes matrix Dyson and DMFT future directions.
 
 **This is the strongest candidate for publication** (Phys. Rev. B or Comp. Phys. Comm.).
 
 ### 5. [inverse_correspondence.ipynb](notebooks/inverse_correspondence.ipynb) — Regular vs. Inverted Dynamics
 
-Exploratory notebook comparing regular ($\alpha = 1$) and inverted ($\alpha = -1$) logistic map dynamics. Dual bifurcation diagrams, period analysis, Lyapunov comparison, continuous $\alpha$ sweep, full $(\alpha, a)$ phase diagram, and position-dependent $\alpha(x)$ experiments. Includes connection to OGY chaos control.
+Exploratory notebook comparing regular ($\alpha = 1$) and inverted ($\alpha = -1$) logistic map dynamics.
+Dual bifurcation diagrams, period analysis, Lyapunov comparison, continuous $\alpha$ sweep, full $(\alpha, a)$ phase diagram, and position-dependent $\alpha(x)$ experiments.
+Includes connection to OGY chaos control.
 
 ### 6. [perturbation_detection.ipynb](notebooks/perturbation_detection.ipynb) — Classical Perturbation Detection
 
-Demonstrates that measuring the $\alpha(x)$ profile of a damped oscillator exactly reconstructs perturbation forces: parallel Hooke springs, displaced equilibria, quartic anharmonicity. Blind reconstruction test.
+Demonstrates that measuring the $\alpha(x)$ profile of a damped oscillator exactly reconstructs perturbation forces:
+parallel Hooke springs, displaced equilibria, quartic anharmonicity.
+Blind reconstruction test.
 
 ### 7. [quantum_perturbation_detection.ipynb](notebooks/quantum_perturbation_detection.ipynb) — Quantum Perturbation Detection
 
-Extends perturbation detection to the hydrogen atom. Sequential stacking procedure: Coulomb baseline → detect fine structure (1/r³) → detect vacuum polarization (Yukawa). Shape of $\alpha(r) - 1$ discriminates power-law vs. exponential perturbations. Includes blind Gaussian well test.
+Extends perturbation detection to the hydrogen atom.
+Sequential stacking procedure: Coulomb baseline → detect fine structure (1/r³) → detect vacuum polarization (Yukawa).
+Shape of $\alpha(r) - 1$ discriminates power-law vs. exponential perturbations.
+Includes blind Gaussian well test.
 
 ### Short-term Investigations
 
@@ -143,19 +169,26 @@ These notebooks test specific predictions from the core theory with Dask-paralle
 
 #### 8. [matrix_dyson_universality.ipynb](notebooks/matrix_dyson_universality.ipynb) — Matrix Dyson $\alpha^*$
 
-Tests whether $\alpha^* \approx 0.5$ holds for multi-orbital Dyson equations. Result: holds robustly for diagonal and hybridized self-energies (stays in [0.43, 0.55]); drifts to ~0.62–0.65 for full matrix Σ at higher dimensions, but α=0.5 still achieves 100% convergence.
+Tests whether $\alpha^* \approx 0.5$ holds for multi-orbital Dyson equations.
+Result: holds robustly for diagonal and hybridized self-energies (stays in [0.43, 0.55]);
+drifts to ~0.62–0.65 for full matrix Σ at higher dimensions,
+but α=0.5 still achieves 100% convergence.
 
 #### 9. [lyapunov_alpha_relationship.ipynb](notebooks/lyapunov_alpha_relationship.ipynb) — Lyapunov Reflection Symmetry
 
-Discovers the $\mathbb{Z}_2$ reflection $\Lambda(\alpha) = \Lambda(-\alpha)$ — regular and inverted maps have identical Lyapunov exponents ($r = 0.9999$ across 500 parameter values). Reducing $|\alpha|$ below 1 genuinely stabilizes: $\Lambda(0.5) = -0.74$ at $a=4$ vs $\Lambda(1) = +0.69$.
+Discovers the $\mathbb{Z}_2$ reflection $\Lambda(\alpha) = \Lambda(-\alpha)$ — regular and inverted maps have identical Lyapunov exponents ($r = 0.9999$ across 500 parameter values). 
+Reducing $\|\alpha\|$ below 1 genuinely stabilizes: $\Lambda(0.5) = -0.74$ at $a=4$ vs $\Lambda(1) = +0.69$.
 
 #### 10. [piecewise_alpha_dyson.ipynb](notebooks/piecewise_alpha_dyson.ipynb) — Piecewise $\alpha(\omega)$ (Negative)
 
-Tests whether frequency-dependent $\alpha$ improves Dyson convergence. Result: $\alpha^*(\omega)$ barely varies (range [0.503, 0.528]), and piecewise optimization just rediscovers $\alpha \approx 0.5$ everywhere.
+Tests whether frequency-dependent $\alpha$ improves Dyson convergence.
+Result: $\alpha^*(\omega)$ barely varies (range [0.503, 0.528]), and piecewise optimization just rediscovers $\alpha \approx 0.5$ everywhere.
 
 #### 11. [rp_resonance_basis.ipynb](notebooks/rp_resonance_basis.ipynb) — Ruelle-Pollicott Convergence (Negative)
 
-Tests Jacobi polynomial bases for RP resonance computation. Neither Ulam nor weighted Chebyshev converges to exact sub-leading eigenvalues. Convergence rate is $O(N^{0.01})$ — essentially flat.
+Tests Jacobi polynomial bases for RP resonance computation.
+Neither Ulam nor weighted Chebyshev converges to exact sub-leading eigenvalues.
+Convergence rate is $O(N^{0.01})$ — essentially flat.
 
 ### Medium-term Investigations
 
@@ -163,19 +196,68 @@ These notebooks require new frameworks beyond the core theory.
 
 #### 12. [chaos_control_comparison.ipynb](notebooks/chaos_control_comparison.ipynb) — α(x) vs OGY vs Pyragas
 
-Head-to-head comparison of three chaos control methods. α(x) wins basin of attraction at 4/5 parameter values (100% at $a \in \{3.5, 3.8, 3.9, 4.0\}$, but only 63% at $a=3.7$ where OGY gets 100%). **Correction:** Original Pyragas implementation used positive $K$, which provably cannot stabilize logistic fixed points for $a > 3$ (odd number limitation; Nakajima 1997). Now fixed to compute optimal negative $K$ — notebook must be re-executed to update basin numbers.
+Head-to-head comparison of three chaos control methods. α(x) wins basin of attraction at 4/5 parameter values (100% at $a \in \{3.5, 3.8, 3.9, 4.0\}$, but only 63% at $a=3.7$ where OGY gets 100%). **Correction:**
+Original Pyragas implementation used positive $K$, which provably cannot stabilize logistic fixed points for $a > 3$ (odd number limitation; Nakajima 1997).
+Now fixed to compute optimal negative $K$ — notebook must be re-executed to update basin numbers.
 
 #### 13. [experimental_perturbation_detection.ipynb](notebooks/experimental_perturbation_detection.ipynb) — Perturbation Detection Limits
 
-Tests α(x) perturbation reconstruction under noise and multi-perturbation conditions. Core α(x) reconstruction works with critical SNR = 54.1. Multi-perturbation stacking demonstrated. **However**, the "experimental" label is overstated: the optical trap spring constant extraction failed (k=0.546 vs true 10.0, 94.5% error), and the α(x) formula is mathematically equivalent to computing force residuals $V'_\text{true} - V'_\text{model}$, not a fundamentally new technique.
+Tests α(x) perturbation reconstruction under noise and multi-perturbation conditions.
+Core α(x) reconstruction works with critical SNR = 54.1. Multi-perturbation stacking demonstrated.
+**However**, the "experimental" label is overstated: the optical trap spring constant extraction failed (k=0.546 vs true 10.0, 94.5% error),
+and the α(x) formula is mathematically equivalent to computing force residuals $V'_\text{true} - V'_\text{model}$, not a fundamentally new technique.
 
 #### 14. [kadanoff_baym_alpha.ipynb](notebooks/kadanoff_baym_alpha.ipynb) — Kadanoff-Baym / Non-equilibrium Green's Functions
 
-Applies α-relaxation to the two-time Dyson equation on the Keldysh contour. Three key findings: (1) optimal $(\alpha_R, \alpha_<) = (0.10, 0.10)$ — lower than scalar Dyson's $\alpha^* \approx 0.5$; (2) Z₂ symmetry breaks for complex-valued Dyson iteration; (3) smaller α improves energy conservation (drift 0.058 at α=0.3 vs 0.195 at α=1).
+Applies α-relaxation to the two-time Dyson equation on the Keldysh contour.
+
+Three key findings:
+
+1) optimal $(\alpha_R, \alpha_<) = (0.10, 0.10)$ — lower than scalar Dyson's $\alpha^* \approx 0.5$;
+2) Z₂ symmetry breaks for complex-valued Dyson iteration;
+3) smaller α improves energy conservation (drift 0.058 at α=0.3 vs 0.195 at α=1).
+
+#### 15. [alpha_perturbation_probing.ipynb](notebooks/alpha_perturbation_probing.ipynb) — Perturbation Engineering of Fixed Points (New)
+
+Studies what happens to fixed-point structure and trajectories when the logistic map is perturbed by:
+
+1) a high-frequency sine wave
+2) an asymmetric Gaussian bump targeting one fixed point
+
+Contains three proved theorems:
+
+- IFT drift
+- stability shift
+- Gaussian selectivity
+  - numerical verification
+  - frequency sweep revealing null frequencies where fixed points are immune to perturbation
+  - perturbation detection via ergodic reconstruction (~5% relative RMSE)
+  - chaos-onset shift under small ε (~1% of $a$ at ε=0.02).
 
 ### Cross-Theory Connections
 
-[cross_theory_connections.md](notebooks/cross_theory_connections.md) catalogs connections to other mathematical frameworks (group theory, gauge theory, information theory, graph theory, tensor networks, fluid mechanics, etc.) that may simplify, generalize, or provide alternative notation for the alpha-transform results. Priority items: deviation-space coordinates (§12.2), Jacobi polynomial basis for improved RP resonances (§10.1), and information-theoretic bounds on perturbation detection (§3.2).
+[cross_theory_connections.md](notebooks/cross_theory_connections.md) catalogs connections to other mathematical frameworks
+(group theory, gauge theory, information theory, graph theory, tensor networks, fluid mechanics, etc.) that may simplify,
+generalize, or provide alternative notation for the alpha-transform results.  
+
+Priority items:  
+
+- Deviation-space coordinates (§12.2)
+- Jacobi polynomial basis for improved RP resonances (§10.1)
+- information-theoretic bounds on perturbation detection (§3.2)
+  
+Newly added sections:
+
+- **§13**
+  - path integral / transfer matrix — $\mathcal{L}_{g_\alpha} = \alpha\mathcal{L}_f + (1-\alpha)I$
+  - eigenvalue formula
+  - the two distinct optimal-α criteria for FP convergence vs. global mixing
+- **§14**
+  - closed-form orbit representation for $a=4$ via $x_n = \sin^2(2^n\pi\theta_0)$
+  - stability without iteration
+  - connection to α-transform
+- **§15**
+  - use-case readiness table with honest assessment of what is publication-ready vs. needs work
 
 ## Python Package: `petrification/`
 
@@ -203,6 +285,7 @@ petrification/
 | `transforms` | `make_alpha_func(f', a, smooth, cap)` | Build callable $\alpha(x)$ with singularity capping |
 | `iteration` | `iterate_transformed(f, alpha, a, x0, n_iter)` | Iterate with constant or callable $\alpha$ |
 | `iteration` | `cobweb_data(f, a, x0, n_iter, alpha)` | Generate cobweb diagram coordinates |
+| `iteration` | `cobweb_arrows(ax, Ix, Iy, color, alpha, lw, arrow_fraction, arrowsize, skip_first)` | Draw cobweb trajectory with directional arrows via `ax.annotate` |
 | `bifurcation` | `compute_bifurcation(f, a_range, ...)` | Bifurcation diagram: long-term attractor points |
 | `bifurcation` | `compute_bifurcation_transformed(f, alpha, ...)` | Bifurcation under alpha-transform |
 | `quantum` | `solve_eigenstates(V, x_grid, n_states)` | Diagonalize discretized Hamiltonian |
@@ -226,34 +309,134 @@ petrification/
 
 ### Short-term (directly actionable)
 
-- [x] **Matrix Dyson equations**: Does $\alpha^* \approx 0.5$ hold for multi-orbital Dyson in DMFT? This is the natural next step from the scalar result.
-    - **Has substance**: α* ≈ 0.5 holds robustly for diagonal and hybridized self-energies (stays in [0.43, 0.55]). Full matrix Σ drifts to ~0.62-0.65 at higher dimensions, but α=0.5 still achieves 100% convergence (200/200 frequencies vs naive 42/200). The superoperator analysis gives α*=0.520 for d=3. There's a real story here about when and why the universality breaks.
-- [x] **Lyapunov exponent relationship**: How do Lyapunov exponents of regular and $\alpha$-transformed maps relate? Run §4 of inverse_correspondence and characterize the $(\alpha, a)$ phase diagram.
-    - **Has substance (with surprise)**: The Lyapunov exponent satisfies a **reflection symmetry** $\Lambda(\alpha) = \Lambda(-\alpha)$ — confirmed at individual $\alpha$ values ($\Lambda(+0.5) = \Lambda(-0.5)$ exactly) and in the $(\alpha, a)$ phase diagram (chaos boundaries symmetric around $\alpha = 0$). The $\alpha = \pm 1$ case is the most physically meaningful: regular vs inverted maps have $r = 0.9999$ across 500 parameter values, $\text{RMSE} = 0.003$. However, $\Lambda(\alpha) \neq \Lambda(1)$ for general $|\alpha| \neq 1$ — at $a=4$, $\Lambda(0.5) = -0.74$ while $\Lambda(1) = +0.69$, so reducing $|\alpha|$ below 1 genuinely stabilizes the dynamics. The symmetry is $\mathbb{Z}_2$ (sign flip), not full invariance under the group action.
-- [x] **Piecewise $\alpha(\omega)$**: Can we overcome the bootstrap failure of adaptive $\alpha$ by using different constant $\alpha$ values in different frequency windows?
-  - **Negative**: α*(ω) barely varies across frequency: quadratic [0.504, 0.525], cubic [0.503, 0.528], multipole [0.535, 0.542]. Piecewise optimization just rediscovers α ≈ 0.5 everywhere. It's only better than a bad constant choice (piecewise saves 57 iters vs α=0.9, but α=0.55 already gets 55.3 avg iters). The window count sweep confirms: increasing from 1 to 20 windows barely changes anything (55.3 → 55.1 avg iters). Not worth pursuing — a single global α ≈ 0.5 is already near-optimal for scalar Dyson.
-- [x] **Minimal discretization for RP resonances**: What resolution is needed for exact sub-leading Ruelle-Pollicott eigenvalues? Consider Jacobi polynomial basis weighted by arcsine measure (see [cross-theory connections §10](notebooks/cross_theory_connections.md)).
-    - **Negative**: Neither Ulam nor weighted Chebyshev converges to the exact RP eigenvalues. Ulam at N=1600 still gives |λ₁| ≈ 0.57 instead of 0.50. Chebyshev is worse — |λ₀| drifts to 1.79 and |λ₁| error plateaus at 0.48 (essentially no convergence). The Jacobi basis comparison shows Legendre performs best for |λ₀| (0.9995 vs exact 1.0) but all bases fail badly on |λ₁|. Convergence rate is O(N^0.01) — effectively flat. The chebyshev_transfer_weighted implementation likely has a bug in the quadrature or weight handling, and even if fixed, the Bernoulli map's singular invariant measure makes spectral methods struggle.
+- [x] **Matrix Dyson equations**:
+  Does $\alpha^* \approx 0.5$ hold for multi-orbital Dyson in DMFT? This is the natural next step from the scalar result.
+  - **Has substance**:  
+    $α* ≈ 0.5$ holds robustly for diagonal and hybridized self-energies (stays in [0.43, 0.55]). Full matrix Σ drifts to ~0.62-0.65 at higher dimensions,
+    but $α=0.5$ still achieves 100% convergence (200/200 frequencies vs naive 42/200). The superoperator analysis gives $α*=0.520$ for $d=3$.  
+    - There's a real story here about when and why the universality breaks.
+- [x] **Lyapunov exponent relationship**:
+    How do Lyapunov exponents of regular and $\alpha$-transformed maps relate? Run §4 of inverse_correspondence and characterize the $(\alpha, a)$ phase diagram.
+  - **Has substance (with surprise)**:  
+    The Lyapunov exponent satisfies a **reflection symmetry** $\Lambda(\alpha) = \Lambda(-\alpha)$ — confirmed at individual
+    $\alpha$ values ($\Lambda(+0.5) = \Lambda(-0.5)$ exactly) and in the $(\alpha, a)$ phase diagram (chaos boundaries symmetric around $\alpha = 0$).
+    The $\alpha = \pm 1$ case is the most physically meaningful: regular vs inverted maps have $r = 0.9999$ across 500 parameter values, $\text{RMSE} = 0.003$.
+    However, $\Lambda(\alpha) \neq \Lambda(1)$ for general $|\alpha| \neq 1$ — at $a=4$, $\Lambda(0.5) = -0.74$ while $\Lambda(1) = +0.69$,
+    so reducing $|\alpha|$ below 1 genuinely stabilizes the dynamics.
+    - The symmetry is $\mathbb{Z}_2$ (sign flip), not full invariance under the group action.
+- [x] **Piecewise $\alpha(\omega)$**:
+  Can we overcome the bootstrap failure of adaptive $\alpha$ by using different constant $\alpha$ values in different frequency windows?
+  - **Negative**:  
+    α*(ω) barely varies across frequency: quadratic [0.504, 0.525], cubic [0.503, 0.528], multipole [0.535, 0.542].
+    Piecewise optimization just rediscovers α ≈ 0.5 everywhere.
+    It's only better than a bad constant choice (piecewise saves 57 iters vs α=0.9, but α=0.55 already gets 55.3 avg iters).
+    The window count sweep confirms: increasing from 1 to 20 windows barely changes anything (55.3 → 55.1 avg iters).
+  - Not worth pursuing — a single global $α ≈ 0.5$ is already near-optimal for scalar Dyson.
+- [x] **Minimal discretization for RP resonances**:
+  What resolution is needed for exact sub-leading Ruelle-Pollicott eigenvalues? 
+  Consider Jacobi polynomial basis weighted by arcsine measure (see [cross-theory connections §10](notebooks/cross_theory_connections.md)).
+  - **Negative**:  
+    Neither Ulam nor weighted Chebyshev converges to the exact RP eigenvalues.
+    Ulam at N=1600 still gives |λ₁| ≈ 0.57 instead of 0.50.
+    Chebyshev is worse — |λ₀| drifts to 1.79 and |λ₁| error plateaus at 0.48 (essentially no convergence).
+    The Jacobi basis comparison shows Legendre performs best for |λ₀| (0.9995 vs exact 1.0) but all bases fail badly on |λ₁|.
+    Convergence rate is O(N^0.01) — effectively flat.
+    The chebyshev_transfer_weighted implementation likely has a bug in the quadrature or weight handling, and even if fixed,
+    the Bernoulli map's singular invariant measure makes spectral methods struggle.
 
 ### Medium-term (requires new framework)
 
-- [x] **$\alpha(x)$ perturbation detection in experiment**: Apply the reconstruction formula $V'_\text{pert} = kx(\alpha(x) - 1)$ to real experimental data (e.g., optical trap perturbation measurement)
-    - **Partially validated, with key caveats**: Core α(x) reconstruction works under noise (critical SNR = 54.1). Multi-perturbation stacking demonstrated. However, (1) the α(x) reconstruction formula reduces to computing force residuals $V'_\text{true} - V'_\text{model}$, which is standard — the α(x) framing is a ratio repackaging, not a fundamentally new technique; (2) the optical trap spring constant test failed badly (k=0.546 vs true 10.0, 94.5% error); (3) the "experimental" label is overstated since all data is simulated.
-- [x] **Chaos control comparison**: Quantitative comparison of $\alpha(x)$ chaos suppression vs. OGY and Pyragas methods — compute basins of attraction, robustness to noise, control effort
-    - **Partially validated**: α(x) wins basin of attraction at 4/5 parameter values vs OGY: 100% at $a \in \{3.5, 3.8, 3.9, 4.0\}$, but only 63% at $a=3.7$ (OGY gets 100%). Convergence is faster (~6 iterations vs 85 for OGY at $a=3.8$). **Critical issue**: the original Pyragas comparison was invalid — positive $K$ provably cannot stabilize logistic fixed points for $a > 3$ (odd number limitation, Nakajima 1997). The implementation now computes optimal negative $K$ but results need re-execution. The Z₂ result (+α works, −α fails) is confirmed. Period-2 orbit stabilization also demonstrated.
-- [x] **Non-equilibrium Green's functions**: Alpha-relaxation for the Kadanoff-Baym equations (two-time Dyson equation on the Keldysh contour)
-    - **Has substance (with caveats)**: Three key results: (1) optimal $(\alpha_R, \alpha_<) = (0.10, 0.10)$ with residual $3.88 \times 10^{-3}$ — the scalar Dyson $\alpha^* \approx 0.5$ does **not** transfer directly to KB; (2) **Z₂ symmetry breaks**: $\alpha = -0.5$ completely fails (0/200 converged) while $\alpha = +0.5$ works perfectly — the Lyapunov reflection symmetry is specific to real-valued maps; (3) energy drift decreases monotonically with smaller $\alpha$ (0.195 → 0.091 → 0.058 for $\alpha = 1.0, 0.5, 0.3$). Caveat: the KB solver uses explicit time-stepping with self-energy under-relaxation ($\eta=0.3$) and amplitude clamping, which limits the $U$ range and time extent accessible.
+- [x] **$\alpha(x)$ perturbation detection in experiment**:
+  Apply the reconstruction formula $V'_\text{pert} = kx(\alpha(x) - 1)$ to real experimental data (e.g., optical trap perturbation measurement)
+  - **Partially validated, with key caveats**:  
+      Core α(x) reconstruction works under noise (critical SNR = 54.1). Multi-perturbation stacking demonstrated. 
+      However,  
+      1) the α(x) reconstruction formula reduces to computing force residuals $V'_\text{true} - V'_\text{model}$,
+         which is standard — the α(x) framing is a ratio repackaging, not a fundamentally new technique; 
+      2) the optical trap spring constant test failed badly (k=0.546 vs true 10.0, 94.5% error);
+      3) the "experimental" label is overstated since all data is simulated.
+- [x] **Chaos control comparison**:
+  Quantitative comparison of $\alpha(x)$ chaos suppression vs. OGY and Pyragas methods — compute basins of attraction, robustness to noise, control effort
+  - **Partially validated**:  
+      α(x) wins basin of attraction at 4/5 parameter values vs OGY: 100% at $a \in \{3.5, 3.8, 3.9, 4.0\}$, but only 63% at $a=3.7$ (OGY gets 100%).
+      Convergence is faster (~6 iterations vs 85 for OGY at $a=3.8$).
+  - **Critical issue**:  
+      the original Pyragas comparison was invalid — positive $K$ provably cannot stabilize logistic fixed points for $a > 3$ (odd number limitation, Nakajima 1997).
+      The implementation now computes optimal negative $K$ but results need re-execution. The Z₂ result (+α works, −α fails) is confirmed.
+      Period-2 orbit stabilization also demonstrated.
+- [x] **Non-equilibrium Green's functions**:
+  Alpha-relaxation for the Kadanoff-Baym equations (two-time Dyson equation on the Keldysh contour)
+  - **Has substance (with caveats)**:  
+    1) Optimal $(\alpha_R, \alpha_<) = (0.10, 0.10)$ with residual $3.88 \times 10^{-3}$ — the scalar Dyson $\alpha^* \approx 0.5$ does **not** transfer directly to KB;
+    2) **Z₂ symmetry breaks**: $\alpha = -0.5$ completely fails (0/200 converged) while $\alpha = +0.5$ works perfectly — the Lyapunov reflection symmetry is specific to real-valued maps;
+    3) Energy drift decreases monotonically with smaller $\alpha$ (0.195 → 0.091 → 0.058 for $\alpha = 1.0, 0.5, 0.3$).
+       - Caveat: the KB solver uses explicit time-stepping with self-energy under-relaxation ($\eta=0.3$) and amplitude clamping, which limits the $U$ range and time extent accessible.
 
 ### Speculative (may or may not lead anywhere)
 
-- [ ] **Gauge-theoretic formulation**: Does treating $\alpha(x)$ as a gauge field (with the operator group $\Gamma_\alpha \Gamma_\beta = \Gamma_{\alpha\beta}$) produce conservation laws or topological invariants?
-    - **Prediction (partially supported, narrow scope)**: The Lyapunov invariance $\Lambda(\alpha) = \Lambda(-\alpha)$ is a conservation law of the $\Gamma_\alpha$ group under the $\mathbb{Z}_2$ reflection $\alpha \mapsto -\alpha$. The piecewise Dyson result ($\alpha^*$ nearly constant across $\omega$) means the gauge field is "flat" in the Dyson context — zero curvature, no interesting gauge physics. However, the matrix Dyson result ($\alpha^*$ drifts from 0.5 to 0.62-0.65 as orbital dimension increases) suggests non-trivial gauge curvature in orbital space. Prediction: the gauge formulation is unproductive for scalar problems but becomes interesting for multi-orbital systems where the optimal mixing matrix $\boldsymbol{\alpha}$ has off-diagonal structure.
-- [ ] **Concavity inversion in optimization**: Since $g'' = \alpha f''$, negative $\alpha$ flips convexity. Can this be used to escape local minima in non-convex optimization by temporarily inverting the landscape?
-    - **Prediction (unlikely to be useful)**: The Lyapunov data shows $\Lambda(\alpha) = \Lambda(-\alpha)$, so negative $\alpha$ gives exactly the same global convergence rate as positive $\alpha$ of the same magnitude. Concavity flipping doesn't escape local minima any better than standard relaxation — it just accesses the same dynamics through a different route. The period diagram does show different local attractor structures at $\alpha$ vs $-\alpha$ (different periodic orbits become stable), so in principle different fixed points are reachable. But this is redundant with simply varying $|\alpha|$ to change basin boundaries, which is standard relaxation parameter tuning.
-- [ ] **Koopman operator connection**: Does the $\alpha$-transform correspond to a similarity transformation on the Koopman operator? If so, the spectral invariance (equal Lyapunov exponents) follows immediately.
-    - **Prediction (partially true — $\mathbb{Z}_2$ not full group)**: The Lyapunov data reveals the situation is more specific than originally conjectured. Lyapunov exponents satisfy $\Lambda(\alpha) = \Lambda(-\alpha)$ exactly (the reflection symmetry), and $\Lambda(1) = \Lambda(-1)$ to high precision ($r = 0.9999$ across 500 parameter values). But $\Lambda(\alpha) \neq \Lambda(1)$ for general $|\alpha| \neq 1$ — at $a=4$, $\Lambda(0.5) = -0.74$ while $\Lambda(1) = +0.69$. So the Koopman similarity holds only under $\alpha \mapsto -\alpha$ (a $\mathbb{Z}_2$ symmetry), not the full multiplicative group. The Koopman operators of $g_\alpha$ and $g_{-\alpha}$ should be isospectral, but $g_{0.5}$ and $g_1$ have genuinely different spectra. This is provable for maps with the involution symmetry $f(1-x) = f(x)$ (like the logistic map), since $g_{-\alpha}(1-x) = 1 - g_\alpha(x)$ in that case. The clean $\mathbb{Z}_2$ result is likely a short paper on its own.
-- [ ] **Renormalization group connection**: The Migdal-Kadanoff map is already an RG transformation. What does $\alpha$-transforming an RG map mean physically?
-    - **Prediction (conceptually clear, probably not new)**: Alpha-transforming an RG map with $|\alpha| < 1$ slows the RG flow without changing its fixed points — this is exactly what alpha-relaxation does in the Dyson/DMFT context (the DMFT self-consistency loop IS an RG-like iteration). The $\alpha^* \approx 0.5$ result translates to: the optimal RG flow speed is about half the naive rate. This is real but may not lead to new physics beyond what the Dyson results already show. It becomes interesting if different universality classes require different $\alpha^*$, which would mean the optimal relaxation rate encodes the RG fixed-point structure.
+- [ ] **Gauge-theoretic formulation**:
+  Does treating $\alpha(x)$ as a gauge field (with the operator group $\Gamma_\alpha \Gamma_\beta = \Gamma_{\alpha\beta}$) produce conservation laws or topological invariants?
+  - **Prediction (partially supported, narrow scope)**:
+    The Lyapunov invariance $\Lambda(\alpha) = \Lambda(-\alpha)$ is a conservation law of the $\Gamma_\alpha$ group under the $\mathbb{Z}_2$ reflection $\alpha \mapsto -\alpha$.
+    The piecewise Dyson result ($\alpha^*$ nearly constant across $\omega$) means the gauge field is "flat" in the Dyson context — zero curvature, no interesting gauge physics.
+    However, the matrix Dyson result ($\alpha^*$ drifts from 0.5 to 0.62-0.65 as orbital dimension increases) suggests non-trivial gauge curvature in orbital space.  
+    Prediction: the gauge formulation is unproductive for scalar problems but becomes interesting for multi-orbital systems where the optimal mixing matrix
+    $\boldsymbol{\alpha}$ has off-diagonal structure.
+- [ ] **Concavity inversion in optimization**:
+  Since $g'' = \alpha f''$, negative $\alpha$ flips convexity. Can this be used to escape local minima in non-convex optimization by temporarily inverting the landscape?
+  - **Prediction (unlikely to be useful)**:  
+    The Lyapunov data shows $\Lambda(\alpha) = \Lambda(-\alpha)$, so negative $\alpha$ gives exactly the same global convergence rate as positive $\alpha$ of the same magnitude.
+    Concavity flipping doesn't escape local minima any better than standard relaxation — it just accesses the same dynamics through a different route.
+    The period diagram does show different local attractor structures at $\alpha$ vs $-\alpha$ (different periodic orbits become stable), so in principle different fixed points are reachable.
+    But this is redundant with simply varying $|\alpha|$ to change basin boundaries, which is standard relaxation parameter tuning.
+- [ ] **Koopman operator connection**: 
+  Does the $\alpha$-transform correspond to a similarity transformation on the Koopman operator? If so, the spectral invariance (equal Lyapunov exponents) follows immediately.
+  - **Prediction (partially true — $\mathbb{Z}_2$ not full group)**:  
+    The Lyapunov data reveals the situation is more specific than originally conjectured.
+    Lyapunov exponents satisfy $\Lambda(\alpha) = \Lambda(-\alpha)$ exactly (the reflection symmetry), and $\Lambda(1) = \Lambda(-1)$ to high precision ($r = 0.9999$ across 500 parameter values).
+    But $\Lambda(\alpha) \neq \Lambda(1)$ for general $|\alpha| \neq 1$ — at $a=4$, $\Lambda(0.5) = -0.74$ while $\Lambda(1) = +0.69$.
+    So the Koopman similarity holds only under $\alpha \mapsto -\alpha$ (a $\mathbb{Z}_2$ symmetry), not the full multiplicative group.
+    The Koopman operators of $g_\alpha$ and $g_{-\alpha}$ should be isospectral, but $g_{0.5}$ and $g_1$ have genuinely different spectra.
+    This is provable for maps with the involution symmetry $f(1-x) = f(x)$ (like the logistic map), since $g_{-\alpha}(1-x) = 1 - g_\alpha(x)$ in that case.
+    The clean $\mathbb{Z}_2$ result is likely a short paper on its own.
+- [ ] **Renormalization group connection**:
+  The Migdal-Kadanoff map is already an RG transformation. What does $\alpha$-transforming an RG map mean physically?
+  - **Prediction (conceptually clear, probably not new)**:  
+    Alpha-transforming an RG map with $|\alpha| < 1$ slows the RG flow without changing its fixed points — this is exactly what alpha-relaxation does in the Dyson/DMFT context
+    (the DMFT self-consistency loop IS an RG-like iteration).
+    The $\alpha^* \approx 0.5$ result translates to: the optimal RG flow speed is about half the naive rate.
+    This is real but may not lead to new physics beyond what the Dyson results already show.
+    It becomes interesting if different universality classes require different $\alpha^*$, which would mean the optimal relaxation rate encodes the RG fixed-point structure.
+- [x] **Path integral / transfer matrix interpretation**:
+  Is there a spectral meaning for $\alpha^*$ beyond local fixed-point stability? Does the Ruelle-Pollicott spectrum constrain the optimal $\alpha$?
+  - **Resolved (see §13 of cross_theory_connections.md)**: 
+  The Perron-Frobenius operator transforms linearly: $\mathcal{L}_{g_\alpha} = \alpha\mathcal{L}_f + (1-\alpha)I$, with eigenvalues $\mu_k(\alpha) = 1 - \alpha(1-\lambda_k)$.
+  Two distinct optimal criteria emerge:
+  $\alpha^*_\text{FP} = 1/(1-f'(x^*))$ (zeros the derivative at the fixed point — the K-M result) and
+  $\alpha^*_\text{mix} = 1/(1-\lambda_1)$ (zeros the leading RP resonance, maximally accelerates global measure convergence).
+  For the logistic map at $a=4$, $\lambda_1=1/2$ so $\alpha^*_\text{mix}=2$ (outside $[0,1]$).
+  The conjecture $\alpha^*_\text{FP} = \alpha^*_\text{mix}$ for contractive maps is unproved.
+- [x] **Closed-form orbit representation**:
+  Is there a way to describe/obtain orbits without going through the iteration process?
+  - **Resolved for $a=4$ (see §14 of cross_theory_connections.md)**:  
+      The conjugacy $x = \sin^2(\pi\theta)$ gives $x_n = \sin^2(2^n\pi\theta_0)$ — the full orbit from initial conditions, no iteration needed.
+      Period-$n$ orbit points are $x^*_k = \sin^2(k\pi/(2^n-1))$.
+      Stability is computable as $4^n\prod_j|\cos(2^j\pi\theta_0)|$.
+      For $a \neq 4$ no such clean conjugacy exists; the $\alpha$-transform Theorems 1–3 provide a perturbative substitute.
+- [x] **Immediate use cases**:
+  Have we uncovered anything with immediate practical application?
+  - **Assessed (see §15 of cross_theory_connections.md)**:
+    Readiness table covers 7 applications.
+    - Publication-ready claims:
+      1) Z₂ symmetry $\Lambda(\alpha)=\Lambda(-\alpha)$ (provable, short paper);
+      2) perturbation detection exact identity $V'_\text{pert} = V'_\text{model}(\alpha(x)-1)$;
+      3) Theorems 1–3 from the perturbation probing notebook.
+    - Requires more work:
+      1) $\alpha^* \approx 0.5$ universality mechanism for high-dimensional Dyson;
+      2) spectral $\alpha^*_\text{FP}=\alpha^*_\text{mix}$ conjecture.
+    - Speculative:
+      1) multi-component perturbation inference
+      2) frequency-selective immunity as algorithm design principle
 
 ## Environment
 

@@ -161,13 +161,47 @@ These references establish that empirical mixing parameters are standard practic
 
 ---
 
-## 8. Cross-Theory Connections (from cross_theory_connections.md)
+## 8. Chaos Control
+
+Used in `chaos_control_comparison.ipynb` (OGY method, Pyragas feedback, odd-number limitation):
+
+- **Ott, E., Grebogi, C., and Yorke, J.A.** "Controlling chaos." *Physical Review Letters* **64**, 1196–1199 (1990). DOI:10.1103/PhysRevLett.64.1196  
+  *Foundational OGY method — small parameter perturbations to stabilise embedded unstable periodic orbits.*
+
+- **Pyragas, K.** "Continuous control of chaos by self-controlling feedback." *Physics Letters A* **170**, 421–428 (1992). DOI:10.1016/0375-9601(92)90745-8  
+  *Delayed feedback control of chaos (TDAS); the Pyragas method benchmarked against α(x) control.*
+
+- **Nakajima, H.** "On analytical properties of delayed feedback control of chaos." *Physics Letters A* **232**, 207–210 (1997). DOI:10.1016/S0375-9601(97)00362-9  
+  *Proved the odd-number limitation: delayed feedback cannot stabilise orbits with an odd number of real Floquet multipliers greater than 1. Explains the 0% basin in our Pyragas experiments.*
+
+- **Just, W., Bernard, T., Ostheimer, M., Reibold, E., and Benner, H.** "Mechanism of time-delayed feedback control." *Physical Review Letters* **78**, 203–206 (1997). DOI:10.1103/PhysRevLett.78.203  
+  *Provides the mechanism underlying the odd-number limitation; corroborates Nakajima (1997).*
+
+---
+
+## 9. Ergodic Theory / Entropy
+
+Used implicitly across `lyapunov_alpha_relationship.ipynb`, `rp_resonance_basis.ipynb`:
+
+- **Pesin, Ya.B.** "Characteristic Lyapunov exponents and smooth ergodic theory." *Russian Mathematical Surveys* **32**, 55–114 (1977). DOI:10.1070/RM1977v032n04ABEH001639  
+  *Pesin's theorem: for smooth ergodic systems, KS (metric) entropy equals the sum of positive Lyapunov exponents. Basis for the Λ = KS entropy statement in our Lyapunov notebook.*
+
+---
+
+## 10. Related Work on α-Parametrised Maps (for Distinction)
+
+- **Pires, M.A., Tsallis, C., and Curado, E.M.F.** "Composing α-Gauss and logistic maps: Gradual and sudden transitions to chaos." *Physical Review E* **112**, 034209 (2025). DOI:10.1103/lwfn-qrjt  
+  *Introduces the α-Gauss-Logistic map $x_{t+1} = f_L(x_t)x_t^{-\alpha} - \lfloor f_L(x_t)x_t^{-\alpha}\rfloor$. Different from our α-transform (which is the Krasnoselskii-Mann convex combination $g_\alpha = \alpha f + (1-\alpha)\text{id}$): their α parametrises a Gauss-map composition, not a relaxation step. Cited for context; no conflict with our work.*
+
+---
+
+## 11. Cross-Theory Connections (from cross_theory_connections.md)
 
 Frameworks noted as connections but with incomplete bibliographic references:
 
 - **Kottos, T. and Smilansky, U.** Quantum chaos on graphs (1999).
 - **Boyland / Hall** — Braid theory of periodic orbits (1990s).
-- **Pesin's theorem** — Lyapunov exponents as KS entropy (implicit reference).
+- **Strogatz, S.H.** *Nonlinear Dynamics and Chaos*, 2nd ed. (2015). §10.4 gives the closed-form logistic orbit for $a=4$ via the $x=\sin^2(\pi\theta)$ conjugacy.
 
 ---
 
@@ -177,13 +211,15 @@ Frameworks noted as connections but with incomplete bibliographic references:
 |----------|-------|
 | Core theory / iteration | 4 |
 | Quantum mechanics | 7 |
-| Chaos control | 4 |
+| Chaos control | 4 (expanded to 8 with Nakajima/Just) |
 | Transfer operators | 6 |
 | Statistical mechanics / RG | 3 |
 | Self-consistent field methods | 4 |
 | Data-driven methods | 1 |
+| Ergodic theory | 1 |
+| Related α-map work (for distinction) | 1 |
 | Incomplete references | 3 |
-| **Total** | **32** |
+| **Total** | **≥ 39** |
 
 Most cited author: **Turbiner, A.V.** (4 distinct works).
 Time span: 1931–2025.
