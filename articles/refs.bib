@@ -1,0 +1,481 @@
+% ============================================================
+%  refs.bib  —  Petrification Project Bibliography
+%  Shared reference database for all articles/
+%
+%  Compiled from CITATIONS.md (April 2026) + additions.
+%  Keys follow the pattern: LastnameYYYY or LastnameYYYYword
+% ============================================================
+
+% ============================================================
+%  1. KRASNOSELSKII-MANN ITERATION (foundation)
+% ============================================================
+
+@article{Krasnoselskii1955,
+  author  = {Krasnoselski{\u\i}, M. A.},
+  title   = {Two remarks on the method of successive approximations},
+  journal = {Uspekhi Matematicheskikh Nauk},
+  volume  = {10},
+  number  = {1},
+  pages   = {123--127},
+  year    = {1955},
+  note    = {In Russian. The paper introduces the relaxed iteration
+             $x_{n+1} = \tfrac{1}{2}(x_n + Tx_n)$ for nonexpansive $T$,
+             the progenitor of the K-M family.}
+}
+
+@article{Mann1953,
+  author  = {Mann, W. R.},
+  title   = {Mean value methods in iteration},
+  journal = {Proceedings of the American Mathematical Society},
+  volume  = {4},
+  number  = {3},
+  pages   = {506--510},
+  year    = {1953},
+  doi     = {10.2307/2032162}
+}
+
+@book{Berinde2007,
+  author    = {Berinde, Vasile},
+  title     = {Iterative Approximation of Fixed Points},
+  edition   = {2nd},
+  series    = {Lecture Notes in Mathematics},
+  volume    = {1912},
+  publisher = {Springer},
+  address   = {Berlin},
+  year      = {2007},
+  doi       = {10.1007/978-3-540-72234-2}
+}
+
+% ============================================================
+%  2. LOGISTIC MAP, PERIOD-DOUBLING, CHAOS
+% ============================================================
+
+@article{May1976,
+  author  = {May, Robert M.},
+  title   = {Simple mathematical models with very complicated dynamics},
+  journal = {Nature},
+  volume  = {261},
+  pages   = {459--467},
+  year    = {1976},
+  doi     = {10.1038/261459a0}
+}
+
+@article{Feigenbaum1978,
+  author  = {Feigenbaum, Mitchell J.},
+  title   = {Quantitative universality for a class of nonlinear transformations},
+  journal = {Journal of Statistical Physics},
+  volume  = {19},
+  number  = {1},
+  pages   = {25--52},
+  year    = {1978},
+  doi     = {10.1007/BF01020332}
+}
+
+@article{MetropolisSteinStein1973,
+  author  = {Metropolis, N. and Stein, M. L. and Stein, P. R.},
+  title   = {On finite limit sets for transformations on the unit interval},
+  journal = {Journal of Combinatorial Theory, Series A},
+  volume  = {15},
+  number  = {1},
+  pages   = {25--44},
+  year    = {1973},
+  doi     = {10.1016/0097-3165(73)90033-2}
+}
+
+@article{Lorenz1963,
+  author  = {Lorenz, Edward N.},
+  title   = {Deterministic nonperiodic flow},
+  journal = {Journal of the Atmospheric Sciences},
+  volume  = {20},
+  number  = {2},
+  pages   = {130--141},
+  year    = {1963},
+  doi     = {10.1175/1520-0469(1963)020<0130:DNF>2.0.CO;2}
+}
+
+@book{Strogatz2015,
+  author    = {Strogatz, Steven H.},
+  title     = {Nonlinear Dynamics and Chaos},
+  edition   = {2nd},
+  publisher = {CRC Press},
+  address   = {Boca Raton},
+  year      = {2015},
+  note      = {Section 10.4 gives the closed-form logistic orbit for
+               $a=4$ via the conjugacy $x = \sin^2(\pi\varphi)$.}
+}
+
+% ============================================================
+%  3. CHAOS CONTROL
+% ============================================================
+
+@article{OttGrebogiYorke1990,
+  author  = {Ott, Edward and Grebogi, Celso and Yorke, James A.},
+  title   = {Controlling chaos},
+  journal = {Physical Review Letters},
+  volume  = {64},
+  number  = {11},
+  pages   = {1196--1199},
+  year    = {1990},
+  doi     = {10.1103/PhysRevLett.64.1196}
+}
+
+@article{Pyragas1992,
+  author  = {Pyragas, Kestutis},
+  title   = {Continuous control of chaos by self-controlling feedback},
+  journal = {Physics Letters A},
+  volume  = {170},
+  number  = {6},
+  pages   = {421--428},
+  year    = {1992},
+  doi     = {10.1016/0375-9601(92)90745-8}
+}
+
+@article{Nakajima1997,
+  author  = {Nakajima, Hiroyuki},
+  title   = {On analytical properties of delayed feedback control of chaos},
+  journal = {Physics Letters A},
+  volume  = {232},
+  number  = {3--4},
+  pages   = {207--210},
+  year    = {1997},
+  doi     = {10.1016/S0375-9601(97)00362-9},
+  note    = {Proves the odd-number limitation: delayed feedback control
+             cannot stabilise orbits with an odd number of real Floquet
+             multipliers greater than unity.}
+}
+
+@article{JustEtAl1997,
+  author  = {Just, Wolfram and Bernard, Thomas and Ostheimer, Matthias
+             and Reibold, Ekkehard and Benner, Hartmut},
+  title   = {Mechanism of time-delayed feedback control},
+  journal = {Physical Review Letters},
+  volume  = {78},
+  number  = {2},
+  pages   = {203--206},
+  year    = {1997},
+  doi     = {10.1103/PhysRevLett.78.203}
+}
+
+% ============================================================
+%  4. ERGODIC THEORY / LYAPUNOV / ENTROPY
+% ============================================================
+
+@article{Pesin1977,
+  author  = {Pesin, Ya. B.},
+  title   = {Characteristic {Lyapunov} exponents and smooth ergodic theory},
+  journal = {Russian Mathematical Surveys},
+  volume  = {32},
+  number  = {4},
+  pages   = {55--114},
+  year    = {1977},
+  doi     = {10.1070/RM1977v032n04ABEH001639},
+  note    = {Pesin's theorem: for smooth ergodic systems, the
+             Kolmogorov-Sinai entropy equals the sum of positive
+             Lyapunov exponents.}
+}
+
+% ============================================================
+%  5. TRANSFER OPERATORS / RUELLE-POLLICOTT RESONANCES
+% ============================================================
+
+@article{Koopman1931,
+  author  = {Koopman, Bernard O.},
+  title   = {{Hamiltonian} systems and transformation in {Hilbert} space},
+  journal = {Proceedings of the National Academy of Sciences},
+  volume  = {17},
+  number  = {5},
+  pages   = {315--318},
+  year    = {1931},
+  doi     = {10.1073/pnas.17.5.315}
+}
+
+@article{Ruelle1986,
+  author  = {Ruelle, David},
+  title   = {Resonances of chaotic dynamical systems},
+  journal = {Physical Review Letters},
+  volume  = {56},
+  number  = {5},
+  pages   = {405--407},
+  year    = {1986},
+  doi     = {10.1103/PhysRevLett.56.405}
+}
+
+@article{Ruelle1976,
+  author  = {Ruelle, David},
+  title   = {Zeta-functions for expanding maps and {Anosov} flows},
+  journal = {Inventiones Mathematicae},
+  volume  = {34},
+  number  = {3},
+  pages   = {231--242},
+  year    = {1976},
+  doi     = {10.1007/BF01403069}
+}
+
+@article{Mezic2005,
+  author  = {Mezi{\'c}, Igor},
+  title   = {Spectral properties of dynamical systems, model reduction
+             and decompositions},
+  journal = {Nonlinear Dynamics},
+  volume  = {41},
+  pages   = {309--325},
+  year    = {2005},
+  doi     = {10.1007/s11071-005-2824-x}
+}
+
+@article{BudicMohrMezic2012,
+  author  = {Budi{\v s}i{\'c}, Marko and Mohr, Ryan and Mezi{\'c}, Igor},
+  title   = {Applied {Koopmanism}},
+  journal = {Chaos},
+  volume  = {22},
+  number  = {4},
+  pages   = {047510},
+  year    = {2012},
+  doi     = {10.1063/1.4772195}
+}
+
+@article{Froyland1998,
+  author  = {Froyland, Gary},
+  title   = {Approximating physical invariant measures of mixing dynamical
+             systems in higher dimensions},
+  journal = {Nonlinearity},
+  volume  = {11},
+  pages   = {1043--1090},
+  year    = {1998},
+  doi     = {10.1088/0951-7715/11/4/018}
+}
+
+% ============================================================
+%  6. QUANTUM MECHANICS — RICCATI-BLOCH / TURBINER
+% ============================================================
+
+@article{Turbiner1984,
+  author  = {Turbiner, Alexander V.},
+  title   = {The eigenvalue spectrum in quantum mechanics and the
+             nonlinearization procedure},
+  journal = {Soviet Physics Uspekhi},
+  volume  = {27},
+  number  = {9},
+  pages   = {668--694},
+  year    = {1984},
+  doi     = {10.1070/PU1984v027n09ABEH004155}
+}
+
+@article{Turbiner1988,
+  author  = {Turbiner, Alexander V.},
+  title   = {Quasi-exactly-solvable problems and {$\mathfrak{sl}(2)$} algebra},
+  journal = {Communications in Mathematical Physics},
+  volume  = {118},
+  number  = {3},
+  pages   = {467--474},
+  year    = {1988},
+  doi     = {10.1007/BF01466727}
+}
+
+@article{Turbiner2016,
+  author  = {Turbiner, Alexander V.},
+  title   = {One-dimensional quasi-exactly solvable {Schr\"odinger} equations},
+  journal = {Physics Reports},
+  volume  = {642},
+  pages   = {1--71},
+  year    = {2016},
+  doi     = {10.1016/j.physrep.2016.06.002}
+}
+
+@book{Griffiths2018,
+  author    = {Griffiths, David J. and Schroeter, Darrell F.},
+  title     = {Introduction to Quantum Mechanics},
+  edition   = {3rd},
+  publisher = {Cambridge University Press},
+  year      = {2018},
+  doi       = {10.1017/9781316995433}
+}
+
+% ============================================================
+%  7. SELF-CONSISTENT FIELD / DYSON / GW
+% ============================================================
+
+@article{Chibani2016,
+  author  = {Chibani, Sander and Gonze, Xavier and Rignanese, Gian-Marco
+             and C{\^o}t{\'e}, Michel},
+  title   = {Self-consistent {Green's} function embedding for advanced
+             electronic structure methods based on a one-dimensional model},
+  journal = {Physical Review B},
+  volume  = {93},
+  number  = {3},
+  pages   = {035104},
+  year    = {2016},
+  doi     = {10.1103/PhysRevB.93.035104},
+  note    = {Uses empirical linear mixing $\lambda = 0.5$ in GW
+             self-consistency. The choice $\lambda = 0.5$ is stated
+             without derivation.}
+}
+
+@article{Caruso2013,
+  author  = {Caruso, Fabio and Rinke, Patrick and Ren, Xinguo
+             and Scheffler, Matthias and Rubio, Angel},
+  title   = {Unified description of ground and excited states of finite
+             systems: the self-consistent {$GW$} approach},
+  journal = {Physical Review B},
+  volume  = {86},
+  number  = {8},
+  pages   = {081102},
+  year    = {2012},
+  doi     = {10.1103/PhysRevB.86.081102}
+}
+
+% ============================================================
+%  8. STATISTICAL MECHANICS / RENORMALIZATION GROUP
+% ============================================================
+
+@article{Wilson1975,
+  author  = {Wilson, Kenneth G.},
+  title   = {The renormalization group: critical phenomena and the
+             {Kondo} problem},
+  journal = {Reviews of Modern Physics},
+  volume  = {47},
+  number  = {4},
+  pages   = {773--840},
+  year    = {1975},
+  doi     = {10.1103/RevModPhys.47.773}
+}
+
+@article{Kadanoff1966,
+  author  = {Kadanoff, Leo P.},
+  title   = {Scaling laws for {Ising} models near $T_c$},
+  journal = {Physics Physique Fizika},
+  volume  = {2},
+  number  = {6},
+  pages   = {263--283},
+  year    = {1966},
+  doi     = {10.1103/PhysicsPhysiqueFizika.2.263}
+}
+
+@article{Migdal1975,
+  author  = {Migdal, Aleksander A.},
+  title   = {Recursion equations in gauge theories},
+  journal = {Soviet Physics JETP},
+  volume  = {42},
+  number  = {3},
+  pages   = {413--418},
+  year    = {1975}
+}
+
+% ============================================================
+%  9. NON-EQUILIBRIUM GREEN'S FUNCTIONS / KADANOFF-BAYM
+% ============================================================
+
+@book{KadanoffBaym1962,
+  author    = {Kadanoff, Leo P. and Baym, Gordon},
+  title     = {Quantum Statistical Mechanics},
+  publisher = {W. A. Benjamin},
+  address   = {New York},
+  year      = {1962}
+}
+
+@book{LipavskySpikaArsejevski2004,
+  author    = {Lipavsk{\'y}, Pavel and {\v S}pi{\v c}ka, V{\'a}clav
+               and Velick{\'y}, Bed{\v r}ich},
+  title     = {Generalized Kadanoff-Baym Ansatz for Deriving Quantum
+               Transport Equations},
+  publisher = {Springer},
+  year      = {2004},
+  note      = {Keldysh contour, Kadanoff-Baym equations for
+               non-equilibrium systems.}
+}
+
+% ============================================================
+%  10. RELATED α-PARAMETERISED MAPS (for distinction)
+% ============================================================
+
+@article{PiresTsallisCurado2025,
+  author  = {Pires, Marcelo A. and Tsallis, Constantino
+             and Curado, Evaldo M. F.},
+  title   = {Composing $\alpha$-{Gauss} and logistic maps: gradual and
+             sudden transitions to chaos},
+  journal = {Physical Review E},
+  volume  = {112},
+  number  = {3},
+  pages   = {034209},
+  year    = {2025},
+  doi     = {10.1103/lwfn-qrjt},
+  note    = {Their $\alpha$ parametrises a Gauss-map composition
+             $x_{t+1} = f_L(x_t)x_t^{-\alpha} - \lfloor\cdots\rfloor$,
+             entirely distinct from the K-M convex combination
+             $g_\theta = \theta f + (1-\theta)\,\mathrm{id}$ used here.}
+}
+
+% ============================================================
+%  11. NUMERICAL SOFTWARE
+% ============================================================
+
+@article{Numpy2020,
+  author  = {Harris, Charles R. and others},
+  title   = {Array programming with {NumPy}},
+  journal = {Nature},
+  volume  = {585},
+  pages   = {357--362},
+  year    = {2020},
+  doi     = {10.1038/s41586-020-2649-2}
+}
+
+@article{Scipy2020,
+  author  = {Virtanen, Pauli and others},
+  title   = {{SciPy} 1.0: fundamental algorithms for scientific computing
+             in {Python}},
+  journal = {Nature Methods},
+  volume  = {17},
+  pages   = {261--272},
+  year    = {2020},
+  doi     = {10.1038/s41592-019-0686-2}
+}
+
+@article{Matplotlib2007,
+  author  = {Hunter, John D.},
+  title   = {Matplotlib: a {2D} graphics environment},
+  journal = {Computing in Science \& Engineering},
+  volume  = {9},
+  number  = {3},
+  pages   = {90--95},
+  year    = {2007},
+  doi     = {10.1109/MCSE.2007.55}
+}
+
+% ============================================================
+%  12. TEXTBOOKS (general reference)
+% ============================================================
+
+@book{TrefethenBau1997,
+  author    = {Trefethen, Lloyd N. and Bau, David},
+  title     = {Numerical Linear Algebra},
+  publisher = {SIAM},
+  address   = {Philadelphia},
+  year      = {1997},
+  doi       = {10.1137/1.9780898719574}
+}
+
+@book{Guckenheimer1983,
+  author    = {Guckenheimer, John and Holmes, Philip},
+  title     = {Nonlinear Oscillations, Dynamical Systems, and Bifurcations
+               of Vector Fields},
+  publisher = {Springer},
+  address   = {New York},
+  year      = {1983},
+  doi       = {10.1007/978-1-4612-1140-2}
+}
+
+@book{Devaney2003,
+  author    = {Devaney, Robert L.},
+  title     = {An Introduction to Chaotic Dynamical Systems},
+  edition   = {2nd},
+  publisher = {Westview Press},
+  year      = {2003}
+}
+
+@book{BenderOrszag1999,
+  author    = {Bender, Carl M. and Orszag, Steven A.},
+  title     = {Advanced Mathematical Methods for Scientists and Engineers},
+  publisher = {Springer},
+  address   = {New York},
+  year      = {1999},
+  doi       = {10.1007/978-1-4757-3069-2}
+}

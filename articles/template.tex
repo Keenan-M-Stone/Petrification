@@ -1,0 +1,415 @@
+% ============================================================
+%  PETRIFICATION PROJECT — LaTeX Article Template
+%  θ-transform (Krasnoselskii-Mann) framework
+%
+%  Journal targets
+%  ---------------
+%  Short proofs / letters (≤4 pages):
+%    Physical Review Letters (PRL)
+%    → \documentclass[aps,prl,twocolumn,superscriptaddress,nofootinbib]{revtex4-2}
+%
+%  Research articles (≥6 pages):
+%    Physical Review E (nonlinear dynamics / chaos / comp. physics)
+%    → \documentclass[aps,pre,twocolumn,superscriptaddress,nofootinbib,longbibliography]{revtex4-2}
+%
+%  Computational physics focus:
+%    Computer Physics Communications (CPC)
+%    → switch to elsarticle class (see comment block at end)
+%
+%  Build
+%  -----
+%    pdflatex template
+%    bibtex   template
+%    pdflatex template
+%    pdflatex template
+%  or simply: make (uses Makefile in this directory)
+% ============================================================
+
+\documentclass[aps,pre,twocolumn,superscriptaddress,nofootinbib,longbibliography]{revtex4-2}
+
+% ---- Unicode declarations (pdflatex + UTF-8 source) --------
+% Declare Greek letters and math symbols used in text mode.
+\DeclareUnicodeCharacter{03B8}{\ensuremath{\theta}}   % θ
+\DeclareUnicodeCharacter{039B}{\ensuremath{\Lambda}}  % Λ
+\DeclareUnicodeCharacter{03B5}{\ensuremath{\varepsilon}} % ε
+\DeclareUnicodeCharacter{2264}{\ensuremath{\leq}}     % ≤
+\DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}     % ≥
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}  % ≈
+\DeclareUnicodeCharacter{2192}{\ensuremath{\to}}      % →
+\DeclareUnicodeCharacter{00B7}{\ensuremath{\cdot}}    % ·
+
+% ---- Core packages -----------------------------------------
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsthm}          % theorem environments
+\usepackage{graphicx}        % \includegraphics
+\usepackage{dcolumn}         % aligned decimal columns in tables
+\usepackage{bm}              % bold math symbols (\bm)
+\usepackage{xcolor}
+\usepackage{booktabs}        % \toprule / \midrule / \bottomrule
+\usepackage{multirow}        % multirow cells in tables
+\usepackage{siunitx}         % SI units (\SI{}, \num{})
+\usepackage{hyperref}        % clickable refs — load last
+\hypersetup{
+  colorlinks = true,
+  linkcolor  = blue!60!black,
+  citecolor  = green!50!black,
+  urlcolor   = blue!60!black,
+}
+
+% ============================================================
+%  NOTATION MACROS
+%
+%  The Krasnoselskii-Mann relaxation parameter is denoted θ
+%  (theta) throughout, consistent with the K-M iteration
+%  literature.  The position-dependent generalisation θ(x) is
+%  the "gauged" version introduced in this work.
+%
+%  NOTE ON NAMING CONFLICT
+%  In the orbit-representation results (Sec. on closed-form
+%  logistic orbits) the angle variable x = sin²(π φ) uses φ
+%  (phi) to avoid collision with the K-M parameter θ.
+% ============================================================
+
+% --- K-M parameter and transform ---
+\newcommand{\param}{\theta}                        % K-M relaxation parameter
+\newcommand{\paramx}{\theta(x)}                    % position-dependent form
+\newcommand{\optparam}{\theta^{*}}                 % optimal value
+\newcommand{\transform}{g_{\param}}                % transformed map (subscript)
+\newcommand{\transformof}[1]{g_{\param}(#1)}       % g_θ(·)
+\newcommand{\KMdef}{%                              % inline definition
+  g_{\param}(x) \;=\; \param\,f(x) + (1-\param)\,x}
+
+% --- Fixed points ---
+\newcommand{\FP}{x^{*}}
+\newcommand{\FPi}[1]{x^{*}_{#1}}                  % indexed: \FPi{0}, \FPi{1}
+
+% --- Dynamical quantities ---
+\newcommand{\Lyap}{\Lambda}                        % Lyapunov exponent
+\newcommand{\Lyapof}[1]{\Lambda\!\left(#1\right)}  % Λ(θ)
+\newcommand{\orbit}[1]{\mathcal{O}(#1)}            % orbit of a point
+
+% --- Perturbation / potential notation ---
+\newcommand{\fzero}{f_0}                           % unperturbed map
+\newcommand{\feps}{f_{\varepsilon}}                % perturbed map
+\newcommand{\Vmodel}{V_{\mathrm{model}}}
+\newcommand{\Vpert}{V_{\mathrm{pert}}}
+\newcommand{\Vtrue}{V_{\mathrm{true}}}
+
+% --- Transfer / Perron-Frobenius operator ---
+\newcommand{\PF}{\mathcal{L}}                      % L_f
+\newcommand{\PFparam}{\mathcal{L}_{g_{\param}}}    % L_{g_θ}
+
+% --- Convenient shorthands ---
+\newcommand{\KM}{Krasnoselskii--Mann}              % hyphenated name
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\bigO}[1]{\mathcal{O}\!\left(#1\right)}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\hilbert}{\mathcal{H}}
+
+% --- Matrix / operator notation (for Dyson / KB papers) ---
+\newcommand{\Sig}{\Sigma}                          % self-energy
+\newcommand{\Green}{G}                             % Green's function
+\newcommand{\Greenz}{G_0}                          % bare Green's function
+
+% --- Plasma / fusion notation (activate for fusion papers) ---
+%\newcommand{\vth}{v_{\mathrm{th}}}
+%\newcommand{\wpe}{\omega_{\mathrm{pe}}}
+%\newcommand{\kB}{k_{\mathrm{B}}}
+%\newcommand{\betaPlasma}{\beta_{\mathrm{p}}}
+
+% ============================================================
+%  THEOREM ENVIRONMENTS  (amsthm)
+% ============================================================
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% ============================================================
+%  DOCUMENT BEGINS
+% ============================================================
+
+\begin{document}
+
+% ------------------------------------------------------------
+%  FRONT MATTER
+% ------------------------------------------------------------
+
+\title{[TITLE: concise, keyword-rich, ≤12 words]}
+
+\author{Keenan M.~Stone}
+\affiliation{[AFFILIATION]}
+\email{[EMAIL]}
+
+% Add co-authors if applicable:
+% \author{Second Author}
+% \affiliation{[AFFILIATION 2]}
+
+\date{\today}
+
+\begin{abstract}
+% Target: 150–250 words (PRL: ≤200 words).
+% Structure: (1) context/problem, (2) what this paper does,
+%            (3) key result in one sentence, (4) significance.
+%
+% Example opening: "We study the [problem] using the
+% θ-transform $\KMdef$, a member of the
+% \KM{} (KM) iteration family~\cite{Krasnoselskii1955,Mann1953}.
+% ..."
+[ABSTRACT PLACEHOLDER]
+\end{abstract}
+
+\keywords{Krasnoselskii-Mann iteration, fixed-point dynamics,
+          θ-transform, logistic map, chaos control,
+          relaxation methods, nonlinear dynamics}
+
+\maketitle
+
+% ============================================================
+\section{Introduction}
+\label{sec:intro}
+% ============================================================
+
+% Paragraph 1: broad context
+% Paragraph 2: the specific open problem
+% Paragraph 3: what this paper does (2–3 sentences)
+% Paragraph 4: outline
+
+The \KM{} (KM) iteration~\cite{Krasnoselskii1955,Mann1953} is a
+fundamental relaxation scheme for approximating fixed points of
+nonexpansive operators.  Given an operator $T$ and an initial
+guess $x_0$, the sequence
+%
+\begin{equation}
+  x_{n+1} = (1-\param_n)\,x_n + \param_n\,T(x_n),
+  \label{eq:KM-iteration}
+\end{equation}
+%
+with $\param_n \in (0,1)$, converges to a fixed point of $T$
+under mild conditions~\cite{Berinde2007}.  For a smooth
+self-map $f : I \to I$ with constant parameter $\param$,
+Eq.~\eqref{eq:KM-iteration} defines the \emph{θ-transform}
+%
+\begin{equation}
+  \KMdef,
+  \label{eq:theta-transform}
+\end{equation}
+%
+which preserves every fixed point of $f$ while rescaling their
+local stability (Sec.~\ref{sec:theory}).
+This paper investigates [STATE FOCUS].
+
+The paper is organised as follows.
+Section~\ref{sec:theory} states the core fixed-point
+preservation and stability propositions.
+Section~\ref{sec:results} presents [RESULTS].
+Section~\ref{sec:discussion} discusses [DISCUSSION].
+Section~\ref{sec:conclusions} concludes.
+
+% ============================================================
+\section{The θ-Transform: Definitions and Properties}
+\label{sec:theory}
+% ============================================================
+
+\subsection{Fixed-point preservation and stability scaling}
+\label{ssec:basic}
+
+\begin{definition}[θ-transform]
+\label{def:theta-transform}
+Let $f : I \to I$ be a smooth self-map of an interval
+$I \subset \reals$.  For $\param \in \reals$, the
+\emph{θ-transform} of $f$ with parameter $\param$ is
+$\KMdef$.
+\end{definition}
+
+\begin{proposition}[Fixed-point preservation]
+\label{prop:fp-preservation}
+For every $\param \in \reals$, $\transform$ and $f$ share the
+same fixed-point set: $\transformof{\FP} = \FP$ if and only if
+$f(\FP) = \FP$.
+\end{proposition}
+%
+\begin{proof}
+$\transformof{\FP} - \FP = \param(f(\FP) - \FP)$.  For
+$\param \neq 0$ this vanishes iff $f(\FP) = \FP$; for
+$\param = 0$ the transform collapses to the identity and
+every point is trivially fixed.
+\end{proof}
+
+\begin{proposition}[Stability scaling]
+\label{prop:stability}
+At a fixed point $\FP$ of $f$,
+%
+\begin{equation}
+  g_\param'(\FP) \;=\; 1 - \param\bigl(1 - f'(\FP)\bigr).
+  \label{eq:stability-scaling}
+\end{equation}
+%
+In particular, the derivative vanishes — giving maximally
+attracting convergence — at the \emph{optimal parameter}
+%
+\begin{equation}
+  \optparam = \frac{1}{1 - f'(\FP)}.
+  \label{eq:optimal-theta}
+\end{equation}
+\end{proposition}
+%
+\begin{proof}
+Differentiate $g_\param(x) = \param f(x) + (1-\param)x$:
+$g_\param'(x) = \param f'(x) + (1-\param)$.  Evaluate at $x = \FP$
+and simplify.
+\end{proof}
+
+\begin{corollary}[Stability inversion]
+\label{cor:inversion}
+A fixed point $\FP$ that is unstable under $f$
+(i.e., $|f'(\FP)| > 1$) is stabilised under $\transform$
+for $\param \in (0, \optparam)$ when $f'(\FP) > 1$, and for
+$\param \in (\optparam, 0)$ when $f'(\FP) < -1$.
+\end{corollary}
+
+\subsection{Position-dependent θ(x)}
+\label{ssec:position-dep}
+
+Making $\param$ position-dependent ($\param \to \paramx$) is the
+analogue of gauging a global symmetry: the composition rule
+$\Gamma_\param \Gamma_\beta = \Gamma_{\param\beta}$ holds
+pointwise.  The derivative now contains an additional
+\emph{connection term}:
+%
+\begin{equation}
+  g'(x) = \theta'(x)\bigl(f(x) - x\bigr)
+           + 1 + \paramx\bigl(f'(x) - 1\bigr).
+  \label{eq:position-dep-derivative}
+\end{equation}
+%
+\begin{proposition}[Gauge invariance of fixed points]
+\label{prop:gauge-invariance}
+The connection term $\theta'(x)(f(x)-x)$ in
+Eq.~\eqref{eq:position-dep-derivative} vanishes at every fixed
+point, so the stability formula Eq.~\eqref{eq:stability-scaling}
+holds locally regardless of the profile $\paramx$.
+\end{proposition}
+
+% ============================================================
+\section{[RESULTS — PAPER-SPECIFIC]}
+\label{sec:results}
+% ============================================================
+
+% Replace this section entirely for each paper.
+% Suggested sub-structure:
+%   \subsection{Setup / model}
+%   \subsection{Main theorem / experiment}
+%   \subsection{Numerical validation}
+
+\subsection{Model and setup}
+\label{ssec:model}
+
+[Describe the map(s) / system studied.  State parameters used.
+For the logistic map: $f(x) = ax(1-x)$, $a \in [1,4]$,
+$x \in [0,1]$.]
+
+\subsection{Main result}
+\label{ssec:main}
+
+\begin{theorem}[[NAME]]
+\label{thm:main}
+[State theorem.]
+\end{theorem}
+%
+\begin{proof}
+[Proof.]
+\end{proof}
+
+\subsection{Numerical verification}
+\label{ssec:numerics}
+
+[Describe computation: Python 3.13, NumPy/SciPy, grid sizes,
+iteration counts, convergence tolerances.
+Reference figures: Fig.~\ref{fig:example}.]
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/placeholder.pdf}
+  \caption{%
+    \textbf{[Panel description.]}
+    [Detailed caption.  State all parameter values.  Note what
+    each panel/colour/linestyle represents.]
+  }
+  \label{fig:example}
+\end{figure}
+
+% ============================================================
+\section{Discussion}
+\label{sec:discussion}
+% ============================================================
+
+[Significance.  Comparison to prior work.  Limitations.
+Honest statement of what is proved vs.\ empirically observed.]
+
+% ============================================================
+\section{Conclusions}
+\label{sec:conclusions}
+% ============================================================
+
+[One paragraph per main contribution.  Restate the central
+result, the method, and the open questions it raises.]
+
+% ============================================================
+\begin{acknowledgments}
+The author thanks Howard Lee (in memoriam), Amara Katabarwa,
+Eric Suter, and Brandon Campbell for discussions during the
+early development of this work.  The term ``Petrification'' was
+coined by Eric Suter.
+\end{acknowledgments}
+
+% ============================================================
+%  APPENDICES
+% ============================================================
+
+\appendix
+
+\section{Numerical Methods and Software}
+\label{app:numerics}
+
+All computations use Python~3.13 with NumPy~\cite{Numpy2020},
+SciPy~\cite{Scipy2020}, and Matplotlib~\cite{Matplotlib2007}.
+[Describe: grid sizes, iteration counts, convergence criteria,
+random seeds, Dask parallelisation where applicable.]
+
+\section{[ADDITIONAL PROOFS]}
+\label{app:proofs}
+
+[Move lengthy derivations here to keep the main text readable.]
+
+% ============================================================
+%  BIBLIOGRAPHY
+% ============================================================
+
+\bibliography{refs}   % compiles from refs.bib in this directory
+
+\end{document}
+
+% ============================================================
+%  ELSARTICLE HEADER (Computer Physics Communications / Elsevier)
+%  Uncomment and replace the revtex4-2 header above if needed.
+% ============================================================
+%
+% \documentclass[preprint,12pt,authoryear]{elsarticle}
+% \usepackage{lineno}
+% \modulolinenumbers[5]
+% \journal{Computer Physics Communications}
+% \bibliographystyle{elsarticle-harv}
