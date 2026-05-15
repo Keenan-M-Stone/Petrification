@@ -31,7 +31,6 @@
 \usepackage{amsfonts}
 \usepackage{amsthm}
 \usepackage{graphicx}
-\usepackage{dcolumn}
 \usepackage{bm}
 \usepackage{xcolor}
 \usepackage{booktabs}
@@ -73,7 +72,7 @@
 
 \author{Keenan M.~Stone}
 \affiliation{Independent researcher}
-\email{[author email]}
+\email{[Lemma137@gmail.com]}
 
 \date{\today}
 
@@ -85,7 +84,7 @@ require an iterative scheme to solve the nonlinear fixed-point
 problem $G = F[G]$.  In practice, a linear mixing parameter
 $\lambda \approx 0.5$ is routinely applied to damp oscillations
 and ensure convergence, but its value has been chosen
-empirically without a theoretical foundation.
+empirically without a clear theoretical foundation in the literature.
 We show that this parameter is the \emph{optimal} relaxation
 coefficient of the Krasnoselskii--Mann (KM) iteration family.
 For the scalar Dyson equation with quadratic self-energy
@@ -104,7 +103,7 @@ For matrix self-energies the universality holds for orbital
 dimension $d \leq 5$ ($\theta^* = 0.470 \pm 0.027$) but drifts
 toward $0.62$--$0.65$ at $d = 8$--$10$.
 All data are reproducible via the companion notebooks at
-\href{https://github.com/[repo]}{[GitHub repo]}.
+\href{https://github.com/Keenan-M-Stone/Petrification}{our GitHub repository}.
 \end{abstract}
 
 \keywords{Dyson equation, GW approximation, DMFT,
@@ -164,8 +163,8 @@ Krasnoselski\u{\i}~\cite{Krasnoselskii1955} and
 Mann~\cite{Mann1953} for finding fixed points of nonexpansive
 operators in Hilbert space.  Berinde~\cite{Berinde2007}
 provides a comprehensive treatment.  Its application to
-complex-valued self-consistent field iterations has not
-previously been analysed.
+complex-valued self-consistent field iterations appears not
+to have been previously analysed.
 
 \paragraph{Companion software.}
 All derivations are accompanied by numerical experiments in the
@@ -322,7 +321,7 @@ numerical calculations.
     All values from \texttt{crossover\_alpha\_turbiner.ipynb}.
   }
   \label{tab:stability}
-  \begin{tabular}{@{}r d{3} c r@{}}
+  \begin{tabular}{@{}r S[table-format=1.3] c r@{}}
     \toprule
     $U$ & \multicolumn{1}{c}{$|F'(\Gstar)|$} & Naive stable? & $\optparam$ \\
     \midrule
@@ -475,16 +474,17 @@ each $U$.  Both converge to $1/2$ as $U \to \infty$.
   \centering
   \includegraphics[width=\columnwidth]{figures/theta_star_vs_U.pdf}
   \caption{%
-    \textbf{Optimal relaxation parameter $\optparam$ vs.\ coupling
-    strength $U$.}
-    Circles: analytically computed $\optparam$ from
-    Eq.~\eqref{eq:thetastar-dyson} at $\omega = i\eta$.
-    Dashed line: $\theta = 0.5$.
-    The analytical value converges to $1/2$ from above as
-    $U \to \infty$, consistent with the wide-band limit
-    derivation.
-    Inset: convergence iteration count for naive vs.\
-    $\theta = 0.5$ across the same $U$ range.
+    \textbf{(a)} Analytically computed optimal parameter $\optparam$
+    from Eq.~\eqref{eq:thetastar-dyson} (circles) vs.\ coupling
+    strength $U$ at $\omega = i\eta$.
+    The dashed line marks $\theta = 0.5$; $\optparam$ converges to
+    $1/2$ from above as $U \to \infty$, consistent with the
+    wide-band limit derivation.
+    \textbf{(b)} Iterations required to reach $10^{-12}$ accuracy
+    for naive iteration ($\theta = 1$, red squares) and constant
+    $\theta = 0.5$ (blue triangles).  The dotted line marks the
+    500-iteration budget; naive iteration exceeds it for all
+    $U \gtrsim 1$.
     Generated from \texttt{crossover\_alpha\_turbiner.ipynb}.
   }
   \label{fig:sweep}
@@ -535,8 +535,8 @@ full optimality.  This is a direction for future work.
 The linear mixing scheme~\eqref{eq:mixing} with $\lambda \approx
 0.5$ is widely used in GW calculations (see
 Refs.~\cite{Chibani2016, Caruso2013, Aryasetiawan1998}) and in
-DMFT self-consistency loops~\cite{Georges1996}.  Our derivation
-provides, for the first time, a rigorous justification for this
+DMFT self-consistency loops~\cite{Georges1996}.  
+This derivation provides, a rigorous justification for this
 choice: it is the KM optimal parameter in the limit where the
 fixed-point derivative of the Dyson map approaches $-1$.
 
@@ -618,7 +618,10 @@ Green's functions.
 The author thanks Howard Lee (in memoriam), Amara Katabarwa,
 Eric Suter, Brandon Campbell, and Andrei Galiautdinov for
 discussions and encouragement.  The term ``Petrification'' was
-coined by Eric Suter.
+coined by Eric Suter (hence the name of the repository), but was
+specifically intended to apply to instances where a negative value
+for $\Theta$ is chosen - such that fixed-points stability in a
+region of interest is inverted.
 \end{acknowledgments}
 
 % ============================================================

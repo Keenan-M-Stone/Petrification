@@ -70,8 +70,6 @@
 \newlabel{sec:numerics}{{IV}{2}{}{section*.14}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {A}Convergence at a single frequency}{2}{section*.15}\protected@file@percent }
 \newlabel{ssec:single}{{IV\,A}{2}{}{section*.15}{}}
-\citation{Chibani2016,Caruso2013,Aryasetiawan1998}
-\citation{Georges1996}
 \@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Convergence at $\omega = i\eta $, $U = 3.0$. ``Iters to $10^{-12}$'' counts iterations until the error drops below $10^{-12}$; ``$> 500$'' means not reached within the iteration budget. All values from \texttt  {crossover\_alpha\_turbiner.ipynb}. }}{3}{table.2}\protected@file@percent }
 \newlabel{tab:convergence}{{II}{3}{Convergence at $\omega = i\eta $, $U = 3.0$. ``Iters to $10^{-12}$'' counts iterations until the error drops below $10^{-12}$; ``$> 500$'' means not reached within the iteration budget. All values from \texttt {crossover\_alpha\_turbiner.ipynb}}{table.2}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Spectral convergence: fraction of 500 frequency points converged within 300 iterations (tolerance $10^{-10}$), with mean residual over converged points in parentheses. All values from \texttt  {crossover\_alpha\_turbiner.ipynb}. }}{3}{table.3}\protected@file@percent }
@@ -80,10 +78,12 @@
 \newlabel{ssec:spectral}{{IV\,B}{3}{}{section*.16}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {C}Coupling-strength sweep}{3}{section*.17}\protected@file@percent }
 \newlabel{ssec:sweep}{{IV\,C}{3}{}{section*.17}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textbf  {Optimal relaxation parameter $\theta ^{*}$ vs.\ coupling strength $U$.} Circles: analytically computed $\theta ^{*}$ from Eq.\nobreakspace  {}\textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:thetastar-dyson}\unskip \@@italiccorr )}} at $\omega = i\eta $. Dashed line: $\theta = 0.5$. The analytical value converges to $1/2$ from above as $U \to \infty $, consistent with the wide-band limit derivation. Inset: convergence iteration count for naive vs.\ $\theta = 0.5$ across the same $U$ range. Generated from \texttt  {crossover\_alpha\_turbiner.ipynb}. }}{3}{figure.1}\protected@file@percent }
-\newlabel{fig:sweep}{{1}{3}{\textbf {Optimal relaxation parameter $\optparam $ vs.\ coupling strength $U$.} Circles: analytically computed $\optparam $ from Eq.~\eqref {eq:thetastar-dyson} at $\omega = i\eta $. Dashed line: $\theta = 0.5$. The analytical value converges to $1/2$ from above as $U \to \infty $, consistent with the wide-band limit derivation. Inset: convergence iteration count for naive vs.\^^M$\theta = 0.5$ across the same $U$ range. Generated from \texttt {crossover\_alpha\_turbiner.ipynb}}{figure.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textbf  {(a)} Analytically computed optimal parameter $\theta ^{*}$ from Eq.\nobreakspace  {}\textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {eq:thetastar-dyson}\unskip \@@italiccorr )}} (circles) vs.\ coupling strength $U$ at $\omega = i\eta $. The dashed line marks $\theta = 0.5$; $\theta ^{*}$ converges to $1/2$ from above as $U \to \infty $, consistent with the wide-band limit derivation. \textbf  {(b)} Iterations required to reach $10^{-12}$ accuracy for naive iteration ($\theta = 1$, red squares) and constant $\theta = 0.5$ (blue triangles). The dotted line marks the 500-iteration budget; naive iteration exceeds it for all $U \gtrsim 1$. Generated from \texttt  {crossover\_alpha\_turbiner.ipynb}. }}{3}{figure.1}\protected@file@percent }
+\newlabel{fig:sweep}{{1}{3}{\textbf {(a)} Analytically computed optimal parameter $\optparam $ from Eq.~\eqref {eq:thetastar-dyson} (circles) vs.\ coupling strength $U$ at $\omega = i\eta $. The dashed line marks $\theta = 0.5$; $\optparam $ converges to $1/2$ from above as $U \to \infty $, consistent with the wide-band limit derivation. \textbf {(b)} Iterations required to reach $10^{-12}$ accuracy for naive iteration ($\theta = 1$, red squares) and constant $\theta = 0.5$ (blue triangles). The dotted line marks the 500-iteration budget; naive iteration exceeds it for all $U \gtrsim 1$. Generated from \texttt {crossover\_alpha\_turbiner.ipynb}}{figure.1}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {V}Matrix Extension}{3}{section*.18}\protected@file@percent }
 \newlabel{sec:matrix}{{V}{3}{}{section*.18}{}}
+\citation{Chibani2016,Caruso2013,Aryasetiawan1998}
+\citation{Georges1996}
 \citation{Anderson1965}
 \citation{KadanoffBaym1962}
 \bibdata{dyson_universalityNotes,refs}
@@ -100,7 +100,6 @@
 \@writefile{toc}{\appendix }
 \@writefile{toc}{\contentsline {section}{\numberline {A}Derivation of the wide-band limit $\theta ^* = 1/2$}{4}{section*.26}\protected@file@percent }
 \newlabel{app:wideband}{{A}{4}{}{section*.26}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {}References}{4}{section*.27}\protected@file@percent }
 \bibcite{Georges1996}{{2}{1996}{{Georges\ \emph  {et~al.}}}{{Georges, Kotliar, Krauth,\ and\ Rozenberg}}}
 \bibcite{Chibani2016}{{3}{2016}{{Chibani\ \emph  {et~al.}}}{{Chibani, Gonze, Rignanese,\ and\ C{\^o}t{\'e}}}}
 \bibcite{Caruso2013}{{4}{2012}{{Caruso\ \emph  {et~al.}}}{{Caruso, Rinke, Ren, Scheffler,\ and\ Rubio}}}
@@ -115,6 +114,7 @@
 \bibstyle{apsrev4-2}
 \citation{REVTEX42Control}
 \citation{apsrev42Control}
+\@writefile{toc}{\contentsline {section}{\numberline {}References}{5}{section*.27}\protected@file@percent }
 \newlabel{LastBibItem}{{12}{5}{}{section*.27}{}}
 \newlabel{LastPage}{{}{5}{}{}{}}
 \gdef \@abspage@last{5}
