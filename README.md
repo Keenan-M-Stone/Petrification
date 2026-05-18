@@ -71,6 +71,13 @@ I think it's safe to say you can think of $\alpha$ as the special cases of $\The
 
 ## Key Results
 
+### Articles
+
+1. [Optimal relaxation parameter for Dyson equation self-consistency: a fixed-point derivation via the Krasnoselskii–Mann θ-transform](articles/dyson_universality/dyson_universality.pdf)
+2. [Z₂ reflection symmetry of Lyapunov exponents under the Krasnoselskii–Mann θ-transform, and its breakdown for complex-valued iteration](articles/z2_symmetry/z2_symmetry.pdf)
+3. [Fixed-point engineering via additive perturbations of the logistic map: drift, stability shift, selectivity, and null frequencies](articles/perturbation_probing/perturbation_probing.pdf)
+4. [Static α(x) chaos control versus OGY and corrected-gain Pyragas: basin-of-attraction comparison for the logistic map](articles/chaos_control/chaos_control.pdf)
+
 ### Established (validated, not novel)
 
 - **Stability inversion theorems** (Props 1-5): clean characterization of how $\alpha$ rescales, inverts, and zeroes fixed-point derivatives

@@ -1,0 +1,149 @@
+%apsrev4-2.bst 2019-01-14 (MD) hand-edited version of apsrev4-1.bst
+%Control: key (0)
+%Control: author (8) initials jnrlst
+%Control: editor formatted (1) identically to author
+%Control: production of article title (0) allowed
+%Control: page (0) single
+%Control: year (1) truncated
+%Control: production of eprint (0) enabled
+\begin{thebibliography}{10}%
+\makeatletter
+\providecommand \@ifxundefined [1]{%
+ \@ifx{#1\undefined}
+}%
+\providecommand \@ifnum [1]{%
+ \ifnum #1\expandafter \@firstoftwo
+ \else \expandafter \@secondoftwo
+ \fi
+}%
+\providecommand \@ifx [1]{%
+ \ifx #1\expandafter \@firstoftwo
+ \else \expandafter \@secondoftwo
+ \fi
+}%
+\providecommand \natexlab [1]{#1}%
+\providecommand \enquote  [1]{``#1''}%
+\providecommand \bibnamefont  [1]{#1}%
+\providecommand \bibfnamefont [1]{#1}%
+\providecommand \citenamefont [1]{#1}%
+\providecommand \href@noop [0]{\@secondoftwo}%
+\providecommand \href [0]{\begingroup \@sanitize@url \@href}%
+\providecommand \@href[1]{\@@startlink{#1}\@@href}%
+\providecommand \@@href[1]{\endgroup#1\@@endlink}%
+\providecommand \@sanitize@url [0]{\catcode `\\12\catcode `\$12\catcode
+  `\&12\catcode `\#12\catcode `\^12\catcode `\_12\catcode `\%12\relax}%
+\providecommand \@@startlink[1]{}%
+\providecommand \@@endlink[0]{}%
+\providecommand \url  [0]{\begingroup\@sanitize@url \@url }%
+\providecommand \@url [1]{\endgroup\@href {#1}{\urlprefix }}%
+\providecommand \urlprefix  [0]{URL }%
+\providecommand \Eprint [0]{\href }%
+\providecommand \doibase [0]{https://doi.org/}%
+\providecommand \selectlanguage [0]{\@gobble}%
+\providecommand \bibinfo  [0]{\@secondoftwo}%
+\providecommand \bibfield  [0]{\@secondoftwo}%
+\providecommand \translation [1]{[#1]}%
+\providecommand \BibitemOpen [0]{}%
+\providecommand \bibitemStop [0]{}%
+\providecommand \bibitemNoStop [0]{.\EOS\space}%
+\providecommand \EOS [0]{\spacefactor3000\relax}%
+\providecommand \BibitemShut  [1]{\csname bibitem#1\endcsname}%
+\let\auto@bib@innerbib\@empty
+%</preamble>
+\bibitem [{\citenamefont {Ott}\ \emph {et~al.}(1990)\citenamefont {Ott},
+  \citenamefont {Grebogi},\ and\ \citenamefont {Yorke}}]{OttGrebogiYorke1990}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {E.}~\bibnamefont
+  {Ott}}, \bibinfo {author} {\bibfnamefont {C.}~\bibnamefont {Grebogi}},\ and\
+  \bibinfo {author} {\bibfnamefont {J.~A.}\ \bibnamefont {Yorke}},\ }\bibfield
+  {title} {\bibinfo {title} {Controlling chaos},\ }\href
+  {https://doi.org/10.1103/PhysRevLett.64.1196} {\bibfield  {journal} {\bibinfo
+   {journal} {Physical Review Letters}\ }\textbf {\bibinfo {volume} {64}},\
+  \bibinfo {pages} {1196} (\bibinfo {year} {1990})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Pyragas}(1992)}]{Pyragas1992}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {K.}~\bibnamefont
+  {Pyragas}},\ }\bibfield  {title} {\bibinfo {title} {Continuous control of
+  chaos by self-controlling feedback},\ }\href
+  {https://doi.org/10.1016/0375-9601(92)90745-8} {\bibfield  {journal}
+  {\bibinfo  {journal} {Physics Letters A}\ }\textbf {\bibinfo {volume}
+  {170}},\ \bibinfo {pages} {421} (\bibinfo {year} {1992})}\BibitemShut
+  {NoStop}%
+\bibitem [{\citenamefont {Nakajima}(1997)}]{Nakajima1997}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {H.}~\bibnamefont
+  {Nakajima}},\ }\bibfield  {title} {\bibinfo {title} {On analytical properties
+  of delayed feedback control of chaos},\ }\href
+  {https://doi.org/10.1016/S0375-9601(97)00362-9} {\bibfield  {journal}
+  {\bibinfo  {journal} {Physics Letters A}\ }\textbf {\bibinfo {volume}
+  {232}},\ \bibinfo {pages} {207} (\bibinfo {year} {1997})},\ \bibinfo {note}
+  {proves the odd-number limitation: delayed feedback control cannot stabilise
+  orbits with an odd number of real Floquet multipliers greater than
+  unity.}\BibitemShut {Stop}%
+\bibitem [{\citenamefont {Just}\ \emph {et~al.}(1997)\citenamefont {Just},
+  \citenamefont {Bernard}, \citenamefont {Ostheimer}, \citenamefont {Reibold},\
+  and\ \citenamefont {Benner}}]{JustEtAl1997}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {W.}~\bibnamefont
+  {Just}}, \bibinfo {author} {\bibfnamefont {T.}~\bibnamefont {Bernard}},
+  \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Ostheimer}}, \bibinfo
+  {author} {\bibfnamefont {E.}~\bibnamefont {Reibold}},\ and\ \bibinfo {author}
+  {\bibfnamefont {H.}~\bibnamefont {Benner}},\ }\bibfield  {title} {\bibinfo
+  {title} {Mechanism of time-delayed feedback control},\ }\href
+  {https://doi.org/10.1103/PhysRevLett.78.203} {\bibfield  {journal} {\bibinfo
+  {journal} {Physical Review Letters}\ }\textbf {\bibinfo {volume} {78}},\
+  \bibinfo {pages} {203} (\bibinfo {year} {1997})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Stone}(2026{\natexlab{a}})}]{DysonPaper}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {K.~M.}\ \bibnamefont
+  {Stone}},\ }\bibfield  {title} {\bibinfo {title} {Optimal relaxation
+  parameter for {Dyson} equation self-consistency: a fixed-point derivation via
+  the {Krasnoselskii--Mann} $\theta$-transform}} (\bibinfo {year}
+  {2026}{\natexlab{a}}),\ \bibinfo {note} {companion paper in this series;
+  preprint available at
+  \url{https://github.com/Keenan-M-Stone/Petrification}.}\BibitemShut {Stop}%
+\bibitem [{\citenamefont {Stone}(2026{\natexlab{b}})}]{PetrificationRepo}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {K.~M.}\ \bibnamefont
+  {Stone}},\ }\href@noop {} {\bibinfo {title} {Petrification: Fixed-point
+  dynamics applied to eigenvalue problems, chaos control, and perturbation
+  detection}},\ \bibinfo {howpublished} {GitHub repository,
+  \url{https://github.com/Keenan-M-Stone/Petrification}} (\bibinfo {year}
+  {2026}{\natexlab{b}}),\ \bibinfo {note} {companion notebook suite for this
+  paper. Relevant notebooks: \texttt{crossover\_alpha\_turbiner.ipynb} (scalar
+  Dyson), \texttt{matrix\_dyson\_universality.ipynb} (matrix),
+  \texttt{kadanoff\_baym\_alpha.ipynb} (non-equilibrium).}\BibitemShut {Stop}%
+\bibitem [{\citenamefont {Krasnoselski{\u\i}}(1955)}]{Krasnoselskii1955}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.~A.}\ \bibnamefont
+  {Krasnoselski{\u\i}}},\ }\bibfield  {title} {\bibinfo {title} {Two remarks on
+  the method of successive approximations},\ }\href@noop {} {\bibfield
+  {journal} {\bibinfo  {journal} {Uspekhi Matematicheskikh Nauk}\ }\textbf
+  {\bibinfo {volume} {10}},\ \bibinfo {pages} {123} (\bibinfo {year} {1955})},\
+  \bibinfo {note} {in Russian. The paper introduces the relaxed iteration
+  $x_{n+1} = \tfrac{1}{2}(x_n + Tx_n)$ for nonexpansive $T$, the progenitor of
+  the K-M family.}\BibitemShut {Stop}%
+\bibitem [{\citenamefont {Mann}(1953)}]{Mann1953}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {W.~R.}\ \bibnamefont
+  {Mann}},\ }\bibfield  {title} {\bibinfo {title} {Mean value methods in
+  iteration},\ }\href {https://doi.org/10.2307/2032162} {\bibfield  {journal}
+  {\bibinfo  {journal} {Proceedings of the American Mathematical Society}\
+  }\textbf {\bibinfo {volume} {4}},\ \bibinfo {pages} {506} (\bibinfo {year}
+  {1953})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Stone}(2026{\natexlab{c}})}]{Z2Paper}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {K.~M.}\ \bibnamefont
+  {Stone}},\ }\bibfield  {title} {\bibinfo {title} {{$\mathbb{Z}_2$} reflection
+  symmetry of {Lyapunov} exponents under the {Krasnoselskii--Mann}
+  $\theta$-transform, and its breakdown for complex-valued iteration}}
+  (\bibinfo {year} {2026}{\natexlab{c}}),\ \bibinfo {note} {companion paper in
+  this series.}\BibitemShut {Stop}%
+\bibitem [{\citenamefont {Stone}(2026{\natexlab{d}})}]{PertPaper}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {K.~M.}\ \bibnamefont
+  {Stone}},\ }\bibfield  {title} {\bibinfo {title} {Fixed-point engineering via
+  additive perturbations of the logistic map: drift, stability shift,
+  selectivity, and null frequencies}} (\bibinfo {year} {2026}{\natexlab{d}}),\
+  \bibinfo {note} {companion paper in this series.}\BibitemShut {Stop}%
+\end{thebibliography}%
