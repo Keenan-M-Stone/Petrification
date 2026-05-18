@@ -150,9 +150,9 @@
   {Stone}},\ }\href@noop {} {\bibinfo {title} {Petrification: Fixed-point
   dynamics applied to eigenvalue problems, chaos control, and perturbation
   detection}},\ \bibinfo {howpublished} {GitHub repository,
-  \url{https://github.com/[author]/Petrification}} (\bibinfo {year} {2026}),\
-  \bibinfo {note} {companion notebook suite for this paper. Relevant notebooks:
-  \texttt{crossover\_alpha\_turbiner.ipynb} (scalar Dyson),
+  \url{https://github.com/Keenan-M-Stone/Petrification}} (\bibinfo {year}
+  {2026}),\ \bibinfo {note} {companion notebook suite for this paper. Relevant
+  notebooks: \texttt{crossover\_alpha\_turbiner.ipynb} (scalar Dyson),
   \texttt{matrix\_dyson\_universality.ipynb} (matrix),
   \texttt{kadanoff\_baym\_alpha.ipynb} (non-equilibrium).}\BibitemShut {Stop}%
 \bibitem [{\citenamefont {Aryasetiawan}\ and\ \citenamefont
